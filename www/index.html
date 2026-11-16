@@ -1,1 +1,478 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Maktab Class Manager</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#14532d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+:root{--g9:#14532d;--g7:#1f7a45;--g3:#cfe8d8;--g1:#eef7f1;--bg:#f6f8f6;--card:#fff;--tx:#17211b;--mu:#5d6d63;--ln:#dbe5de;--H:#1f7a45;--S:#b7791f;--I:#2b6cb0;--A:#c53030}
+@media(prefers-color-scheme:dark){:root{--g9:#0d3a20;--g7:#4cae78;--g3:#24402f;--g1:#16231b;--bg:#0f1612;--card:#17211b;--tx:#e8f0ea;--mu:#9bb0a3;--ln:#2a3a31;--H:#4cae78;--S:#e0a63e;--I:#63a4e8;--A:#ef6b6b}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:5;background:var(--g9);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;display:flex;gap:8px;align-items:center}
+header h1{font-size:16px;margin:0;flex:1;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header select{max-width:42%;background:#ffffff22;color:#fff;border:1px solid #ffffff55;border-radius:8px;padding:6px}
+header select option{color:#000}
+header button{background:#ffffff22;color:#fff;border:1px solid #ffffff55;border-radius:8px;padding:6px 10px;font-size:15px}
+#stat{font-size:11px;background:var(--g1);color:var(--mu);padding:3px 12px;text-align:right}
+main{max-width:920px;margin:0 auto;padding:12px}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--ln);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;border:0;background:none;padding:10px 2px;color:var(--mu);font-size:12px;font-weight:600}
+nav button.on{color:var(--g7);box-shadow:inset 0 3px 0 var(--g7)}
+nav b{display:block;font-size:19px;font-weight:400}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:12px;margin-bottom:12px}
+h2{font-size:16px;margin:0 0 8px;color:var(--g7)} h3{font-size:14px;margin:10px 0 6px}
+input,select,textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--ln);border-radius:8px;padding:8px;width:100%}
+textarea{min-height:90px}
+label.l{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
+.f{display:flex;gap:6px;margin-bottom:6px;align-items:center}.f>*{flex:1}.f>button{flex:0 0 auto}
+button.b{background:var(--g7);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-weight:600;font-size:14px}
+button.b.o{background:none;color:var(--g7);border:1px solid var(--g7)} button.b.d{background:var(--A)} button.b.s{padding:5px 9px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.kpi{background:var(--g1);border-radius:10px;padding:10px}.kpi b{font-size:22px;display:block;color:var(--g7)}.kpi span{font-size:12px;color:var(--mu)}
+.gh{background:var(--g3);padding:6px 10px;border-radius:8px;margin:10px 0 4px;font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.row{display:flex;align-items:center;gap:6px;padding:6px 2px;border-bottom:1px solid var(--ln)}
+.row .nm{flex:1;min-width:0}.row small{color:var(--mu)}
+.no{display:inline-block;min-width:26px;color:var(--g7);font-weight:700}
+.st{display:flex;gap:4px}.st button{width:40px;height:38px;border-radius:8px;border:1px solid var(--ln);background:var(--card);color:var(--mu);font-weight:700}
+.st button.on{color:#fff;border-color:transparent}.st .H.on{background:var(--H)}.st .S.on{background:var(--S)}.st .I.on{background:var(--I)}.st .A.on{background:var(--A)}
+.nilai{width:78px;text-align:center;font-weight:700}
+.chk{display:flex;align-items:center;gap:5px;font-size:12px;white-space:nowrap}.chk input{width:20px;height:20px;padding:0}
+.bar{height:10px;background:var(--g3);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g7)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.chips button{border:1px solid var(--g7);background:none;color:var(--g7);border-radius:20px;padding:6px 12px;font-weight:600;font-size:13px}.chips button.on{background:var(--g7);color:#fff}
+.sc{overflow-x:auto}
+table{border-collapse:collapse;width:100%}th,td{border:1px solid var(--ln);padding:5px 7px;text-align:left;font-size:13px}th{background:var(--g1)}td.c,th.c{text-align:center}
+.paper{background:#fff;color:#000;border:1px solid var(--ln);padding:16px;margin-bottom:12px;overflow-x:auto;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.paper table th{background:#e6f0e9;color:#000}.paper td,.paper th{border-color:#333;color:#000}
+.paper h2{color:#000;text-align:center;font-size:15px;margin:0 0 2px}.paper .sub{text-align:center;font-size:12px;margin-bottom:10px}
+.paper .ttd{display:flex;justify-content:space-between;gap:20px;margin-top:22px;text-align:center;font-size:13px;page-break-inside:avoid}.paper .ttd>div{flex:1}.paper .ttd .ln{margin:60px auto 0;border-bottom:1px solid #000;width:75%}
+/* Rapor ala ijazah */
+.rapor{font-family:Georgia,"Times New Roman",serif;padding:10px;width:100%;min-width:640px}
+.ijz{border:7px double #14532d;padding:5px}
+.ijz-in{border:1.5px solid #b08a2e;padding:20px 26px 18px;position:relative;background:#fff}
+.ijz-in:before,.ijz-in:after{content:"❖";position:absolute;color:#b08a2e;font-size:16px;line-height:1}
+.ijz-in:before{top:4px;left:7px}.ijz-in:after{top:4px;right:7px}
+.ijz-bsm{text-align:center;font-size:20px;color:#14532d;direction:rtl;margin-bottom:6px}
+.ijz-ttl{text-align:center;font-weight:700;font-size:21px;letter-spacing:2px;color:#14532d;line-height:1.25}
+.ijz-orn{text-align:center;color:#b08a2e;letter-spacing:8px;margin:5px 0 8px;font-size:13px}
+.ijz-sub{text-align:center;font-style:italic;font-size:13px}
+.ijz-nama{text-align:center;font-size:27px;font-style:italic;font-weight:700;margin:4px auto 2px;border-bottom:1.5px dotted #b08a2e;padding:0 10px 3px;max-width:88%;color:#000}
+.ijz-info{text-align:center;font-size:13px;margin-bottom:10px}
+.rapor h3{color:#14532d;font-size:13px;margin:12px 0 5px;letter-spacing:.6px;border:0;text-transform:none}
+.rapor table th{background:#14532d;color:#fff!important;border-color:#14532d;font-weight:600}
+.rapor td{font-size:13px}
+.rapor tr.avg td{background:#f3ecd6;font-weight:700}
+.rapor .note{font-size:11px;color:#444;margin-top:4px;font-family:system-ui,sans-serif}
+.rapor:last-child{page-break-after:auto}
+.rapor{page-break-after:always}
+#print{display:none}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#000c;color:#fff;padding:9px 16px;border-radius:20px;z-index:20;display:none;font-size:14px}
+.empty{text-align:center;color:var(--mu);padding:24px}
+@media print{@page{size:A4;margin:12mm}body{background:#fff;padding:0}header,#stat,main,nav,#toast{display:none!important}#print{display:block}#print .paper{border:0;padding:0;overflow:visible}.paper table td,.paper table th{font-size:11px}#print .rapor{min-width:0}}
+</style>
+</head>
+<body>
+<header><h1>Maktab Class Manager</h1><select id="selk" onchange="DB.cls=this.value;save();render()"></select><button onclick="newKelas()" title="Kelas baru">＋</button><button onclick="go('set')" title="Pengaturan">⚙</button></header>
+<div id="stat"></div>
+<main id="main"></main>
+<div id="print"></div><div id="toast"></div>
+<nav>
+<button data-t="home" onclick="go('home')"><b>▦</b>Beranda</button>
+<button data-t="kelas" onclick="go('kelas')"><b>☰</b>Kelas</button>
+<button data-t="absen" id="navabsen" onclick="go('absen')"><b>✔</b>Absensi</button>
+<button data-t="imtihan" onclick="go('imtihan')"><b>✎</b>Imtihan</button>
+<button data-t="laporan" onclick="go('laporan')"><b>⎙</b>Laporan</button>
+</nav>
+<script>
+/* ===== Dasar ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LS='mcm_data_v1',CF='mcm_cfg_v1';
+const DEF={max:100,ttd1:'Wali Kelas 3-R Tsanawiyah',ttd2:'Pimpinan MMU Tsanawiyah',absensi:true,ord:'kelompok',tempat:''};
+let DB=JSON.parse(localStorage.getItem(LS)||'null')||{recs:{},queue:[],cls:null,pushed:false};
+DB.set=Object.assign({},DEF,DB.set||{});
+let CFG=JSON.parse(localStorage.getItem(CF)||'{}');
+let sb=null,user=null,tab='home',ft=null,flushing=false,chan=null;
+const save=()=>localStorage.setItem(LS,JSON.stringify(DB));
+const uid=()=>(window.crypto&&crypto.randomUUID)?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c=='x'?r:r&3|8).toString(16)});
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const fmt=n=>n==null?'–':(Math.round(n*10)/10).toString().replace('.',',');
+const pct=n=>n==null?'–':fmt(n)+'%';
+const tgl=s=>{const[a,b,c]=s.split('-');return c+'/'+b+'/'+a};
+const tglPanjang=()=>new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+const isNative=()=>!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2200)}
+function setStatus(t){$('#stat').textContent=t}
+function loadScript(src){return new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+async function loadLib(test,locals,cdn){if(test())return true;for(const u of [locals,cdn]){try{await loadScript(u);if(test())return true}catch(e){}}return false}
 
+/* ===== Penyimpanan lokal + sinkron Supabase ===== */
+function put(kind,data,id){id=id||uid();DB.recs[id]={id,kind,data,deleted:false,updated_at:new Date().toISOString()};q(id);return id}
+function del(id){const r=DB.recs[id];if(!r)return;r.deleted=true;r.updated_at=new Date().toISOString();q(id)}
+function q(id){if(!DB.queue.includes(id))DB.queue.push(id);save();clearTimeout(ft);ft=setTimeout(flush,400)}
+const all=(kind,f)=>Object.values(DB.recs).filter(r=>r.kind===kind&&!r.deleted&&(!f||f(r.data))).map(r=>Object.assign({},r.data,{id:r.id}));
+const newer=(a,b)=>new Date(a)>new Date(b);
+async function flush(){
+  if(!sb||!user||flushing||!DB.queue.length)return;flushing=true;
+  try{
+    const ids=[...DB.queue];
+    const rows=ids.map(id=>{const r=DB.recs[id];return{id,owner:user.id,kind:r.kind,data:r.data,deleted:r.deleted,updated_at:r.updated_at}});
+    const{error}=await sb.from('records').upsert(rows);if(error)throw error;
+    DB.queue=DB.queue.filter(i=>!ids.includes(i));save();setStatus('Tersinkron ✓ '+user.email);
+  }catch(e){setStatus('Sinkron tertunda: '+(e.message||e))}
+  flushing=false;if(DB.queue.length&&user)ft=setTimeout(flush,3000);
+}
+function mergeRow(r){const l=DB.recs[r.id];if(l&&!newer(r.updated_at,l.updated_at))return false;DB.recs[r.id]={id:r.id,kind:r.kind,data:r.data,deleted:r.deleted,updated_at:r.updated_at};return true}
+async function pull(){const{data,error}=await sb.from('records').select('*').eq('owner',user.id);if(error)throw error;data.forEach(mergeRow);save()}
+async function startSync(){
+  try{
+    setStatus('Menyinkronkan…');
+    if(!DB.pushed){Object.keys(DB.recs).forEach(id=>{if(!DB.queue.includes(id))DB.queue.push(id)});DB.pushed=true}
+    await pull();await flush();render();
+    if(chan)sb.removeChannel(chan);
+    chan=sb.channel('rec-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'records',filter:'owner=eq.'+user.id},p=>{
+      const r=p.new;if(r&&r.id&&mergeRow(r)){save();if(!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))render()}
+    }).subscribe();
+  }catch(e){setStatus('Gagal sinkron: '+(e.message||e))}
+}
+async function connect(){
+  if(!CFG.url||!CFG.key){setStatus('Mode offline (belum terhubung ke Supabase)');return}
+  const ok=await loadLib(()=>!!window.supabase,'vendor/supabase.min.js','https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js');
+  if(!ok){setStatus('Mode offline (pustaka Supabase belum termuat)');return}
+  try{
+    sb=supabase.createClient(CFG.url,CFG.key);
+    const{data}=await sb.auth.getSession();user=data.session?data.session.user:null;
+    if(user)await startSync();else setStatus('Mode offline – belum masuk akun');
+  }catch(e){setStatus('Konfigurasi Supabase salah: '+e.message)}
+}
+window.addEventListener('online',()=>{if(user)startSync()});
+
+/* ===== Berkas: simpan/bagikan ===== */
+let _fs=null,_sh=null;
+async function shareFile(name,b64,mime){
+  if(isNative()){
+    _fs=_fs||Capacitor.registerPlugin('Filesystem');_sh=_sh||Capacitor.registerPlugin('Share');
+    const r=await _fs.writeFile({path:name,data:b64,directory:'CACHE'});
+    await _sh.share({title:name,url:r.uri,dialogTitle:'Simpan atau bagikan'});
+  }else{
+    const bin=atob(b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([u],{type:mime}));a.download=name;a.click();
+  }
+}
+
+/* ===== Data kelas ===== */
+const noSort=(a,b)=>(a.no||99999)-(b.no||99999)||a.nama.localeCompare(b.nama);
+function ensureCls(){const ks=all('kelas');if(!ks.find(k=>k.id===DB.cls))DB.cls=ks[0]?ks[0].id:null;return ks}
+function fixNo(){ // beri nomor absen untuk santri lama yang belum bernomor
+  all('kelas').forEach(k=>{const st=all('santri',d=>d.kelasId===k.id);const miss=st.filter(s=>!s.no);if(!miss.length)return;
+    let mx=Math.max(0,...st.map(s=>s.no||0));miss.forEach(s=>{mx++;put('santri',Object.assign({},DB.recs[s.id].data,{no:mx}),s.id)})})}
+function ctx(){const k=DB.cls,f=d=>d.kelasId===k;
+  return{k,grp:all('kelompok',f).sort((a,b)=>(a.t||0)-(b.t||0)),stu:all('santri',f).sort(noSort),keg:all('kegiatan',f).sort((a,b)=>(a.t||0)-(b.t||0)),kit:all('kitab',f).sort((a,b)=>(a.t||0)-(b.t||0)),abs:all('absensi',f),nil:all('nilai',f)}}
+function byGroup(C){
+  const o=C.grp.map(g=>({g,stu:C.stu.filter(s=>s.kelompokId===g.id)}));
+  const orp=C.stu.filter(s=>!C.grp.find(g=>g.id===s.kelompokId));
+  if(orp.length)o.push({g:{id:'-',nama:'Tanpa kelompok'},stu:orp});return o}
+function blocks(C,ord,pred){pred=pred||(()=>true);
+  if(ord==='absen')return[{g:{id:'*',nama:'Urut nomor absen'},stu:C.stu.filter(pred),flat:true}].filter(x=>x.stu.length);
+  return byGroup(C).map(x=>({g:x.g,stu:x.stu.filter(pred)})).filter(x=>x.stu.length)}
+const grpName=(C,s)=>{const g=C.grp.find(x=>x.id===s.kelompokId);return g?g.nama:'-'};
+const getNil=(C,k,s)=>C.nil.find(n=>n.kitabId===k&&n.santriId===s);
+const mean=a=>{a=a.filter(x=>x!=null);return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
+const validN=(n,C)=>n.nilai!==null&&n.nilai!==''&&n.nilai!==undefined&&!isNaN(n.nilai)&&C.kit.some(k=>k.id===n.kitabId);
+/* Statistik santri. Khatam hanya dihitung/ditampilkan, TIDAK memengaruhi nilai. */
+function stat(s,C,m,forRapor){
+  const kset=new Set(C.keg.filter(k=>!forRapor||k.rapor!==false).map(k=>k.id));
+  const ab=C.abs.filter(a=>kset.has(a.kegiatanId)&&(!m||a.tanggal.startsWith(m)));const c={H:0,S:0,I:0,A:0};
+  ab.forEach(a=>{const v=a.status[s];if(v&&c[v]!==undefined)c[v]++});
+  const tot=c.H+c.S+c.I+c.A,hp=tot?c.H/tot*100:null;
+  const pk=new Set(C.kit.filter(k=>k.pokok).map(k=>k.id));
+  const ns=C.nil.filter(n=>n.santriId===s&&validN(n,C));
+  const av=mean(ns.map(n=>+n.nilai));
+  const np=ns.filter(n=>pk.has(n.kitabId));const avP=mean(np.map(n=>+n.nilai));
+  const kh=C.nil.filter(n=>n.santriId===s&&n.khatam&&C.kit.some(k=>k.id===n.kitabId)).length;
+  return{c,tot,hp,av,nn:ns.length,avP,np:np.length,kh};
+}
+function rankNilai(C){const l=C.stu.map(s=>({s,av:stat(s.id,C).av})).filter(x=>x.av!=null).sort((a,b)=>b.av-a.av);const r={};l.forEach((x,i)=>r[x.s.id]=i+1);return r}
+function grpStat(stu,C,m){const st=stu.map(s=>stat(s.id,C,m));return{n:stu.length,hp:mean(st.map(x=>x.hp)),av:mean(st.map(x=>x.av)),avP:mean(st.map(x=>x.avP)),nn:st.filter(x=>x.av!=null).length,kh:st.reduce((a,x)=>a+x.kh,0)}}
+
+/* ===== Navigasi ===== */
+function go(t){tab=t;render();window.scrollTo(0,0)}
+function ordChips(){const o=DB.set.ord;return`<div class="chips"><span style="align-self:center;font-size:13px;color:var(--mu)">Urutan:</span><button class="${o==='kelompok'?'on':''}" onclick="setOrd('kelompok')">Per kelompok</button><button class="${o==='absen'?'on':''}" onclick="setOrd('absen')">No. absen kelas</button></div>`}
+function setOrd(v){DB.set.ord=v;save();render()}
+function render(){
+  const ks=ensureCls();if(DB.cls&&all('santri',d=>d.kelasId===DB.cls&&!d.no).length)fixNo();
+  if(!DB.set.absensi&&tab==='absen')tab='home';
+  $('#navabsen').style.display=DB.set.absensi?'':'none';
+  $('#selk').innerHTML=ks.map(k=>`<option value="${k.id}" ${k.id===DB.cls?'selected':''}>${esc(k.nama)}</option>`).join('')||'<option>Belum ada kelas</option>';
+  const v={home,kelas,absen,imtihan,laporan,set:pengaturan}[tab];
+  $('#main').innerHTML=(tab!=='set'&&tab!=='home'&&!DB.cls)?noClass():v();
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
+  if(tab==='absen')updCount();if(tab==='imtihan')updIm();
+}
+const noClass=()=>`<div class="card empty">Belum ada kelas.<br><br><button class="b" onclick="newKelas()">Buat kelas pertama</button></div>`;
+function newKelas(){const n=prompt('Nama kelas (contoh: 3-R Tsanawiyah)');if(n&&n.trim()){DB.cls=put('kelas',{nama:n.trim()});save();tab='kelas';render()}}
+function ren(id,label){const r=DB.recs[id];const n=prompt(label,r.data.nama);if(n&&n.trim()){put(r.kind,Object.assign({},r.data,{nama:n.trim()}),id);render()}}
+
+/* ===== Beranda ===== */
+function home(){
+  const C=ctx();if(!C.k)return noClass();
+  const G=byGroup(C),gs=G.map(g=>({g:g.g,s:grpStat(g.stu,C)}));
+  const all_=C.stu.map(s=>({s,st:stat(s.id,C)}));
+  const hp=mean(all_.map(x=>x.st.hp)),av=mean(all_.map(x=>x.st.av)),avP=mean(all_.map(x=>x.st.avP)),kh=all_.reduce((a,x)=>a+x.st.kh,0);
+  const rk=all_.filter(x=>x.st.av!=null).sort((a,b)=>b.st.av-a.st.av);
+  const kitAv=C.kit.map(k=>({k,av:mean(C.nil.filter(n=>n.kitabId===k.id&&validN(n,C)&&C.stu.find(s=>s.id===n.santriId)).map(n=>+n.nilai))}));
+  return `<div class="card"><h2>Ringkasan kelas</h2>
+  <div class="grid"><div class="kpi"><b>${C.stu.length}</b><span>Santri</span></div><div class="kpi"><b>${C.grp.length}</b><span>Kelompok</span></div>${DB.set.absensi?`<div class="kpi"><b>${C.keg.length}</b><span>Kegiatan</span></div>`:''}<div class="kpi"><b>${C.kit.length}</b><span>Kitab (${C.kit.filter(k=>k.pokok).length} pokok)</span></div>
+  ${DB.set.absensi?`<div class="kpi"><b>${pct(hp)}</b><span>Rata-rata kehadiran (${C.abs.length} sesi)</span></div>`:''}<div class="kpi"><b>${fmt(avP)}</b><span>Rata-rata fan pokok</span></div><div class="kpi"><b>${fmt(av)}</b><span>Rata-rata fan seluruh</span></div><div class="kpi"><b>${kh}</b><span>Khatam kitab</span></div></div></div>
+  ${rk.length?`<div class="card"><h2>Prestasi santri (rata-rata fan seluruh)</h2><div class="grid"><div class="kpi"><span>Tertinggi</span><b style="font-size:16px">${esc(rk[0].s.nama)}</b><span>${fmt(rk[0].st.av)} dari ${rk[0].st.nn} nilai</span></div><div class="kpi"><span>Terendah</span><b style="font-size:16px">${esc(rk[rk.length-1].s.nama)}</b><span>${fmt(rk[rk.length-1].st.av)} dari ${rk[rk.length-1].st.nn} nilai</span></div></div></div>`:''}
+  ${gs.length?`<div class="card"><h2>Rata-rata per kelompok</h2>${gs.map(x=>`<div style="margin-bottom:8px"><div class="f" style="margin:0"><span>${esc(x.g.nama)} <small style="color:var(--mu)">(${x.s.nn}/${x.s.n} santri bernilai)</small></span><b style="flex:0 0 auto">${fmt(x.s.av)}</b></div><div class="bar"><i style="width:${Math.min(100,x.s.av||0)}%"></i></div></div>`).join('')}</div>`:''}
+  ${kitAv.some(x=>x.av!=null)?`<div class="card"><h2>Rata-rata per kitab</h2>${kitAv.map(x=>`<div style="margin-bottom:8px"><div class="f" style="margin:0"><span>${esc(x.k.nama)}${x.k.pokok?' ★':''} <small style="color:var(--mu)">${esc(x.k.fan)}</small></span><b style="flex:0 0 auto">${fmt(x.av)}</b></div><div class="bar"><i style="width:${Math.min(100,x.av||0)}%"></i></div></div>`).join('')}</div>`:''}
+  ${!C.stu.length?`<div class="card empty">Belum ada data. Buka tab <b>Kelas</b> untuk membuat kelompok, memasukkan nama santri, kegiatan, dan kitab.</div>`:''}`;
+}
+
+/* ===== Kelas ===== */
+function kelas(){
+  const C=ctx(),kn=all('kelas').find(k=>k.id===C.k);const G=byGroup(C);
+  const grpOpt=C.grp.map(g=>`<option value="${g.id}">${esc(g.nama)}</option>`).join('');
+  const fans=[...new Set(C.kit.map(k=>k.fan))];
+  return `<div class="card"><h2>Kelas: ${esc(kn.nama)}</h2><button class="b o s" onclick="ren('${C.k}','Nama kelas')">Ubah nama</button> <button class="b d s" onclick="delKelas()">Hapus kelas</button> <button class="b s" onclick="newKelas()">＋ Kelas baru</button>
+  <p style="color:var(--mu);font-size:13px;margin:8px 0 0">Setiap kelas punya kelompok, santri, kegiatan, kitab, dan statistik sendiri.</p></div>
+  <div class="card"><h2>1. Kelompok</h2><div class="f"><input id="ng" placeholder="Nama kelompok"><button class="b" onclick="addGrup()">Tambah</button></div>
+  ${C.grp.map(g=>`<div class="row"><span class="nm">${esc(g.nama)} <small>${C.stu.filter(s=>s.kelompokId===g.id).length} santri</small></span><button class="b o s" onclick="ren('${g.id}','Nama kelompok')">Ubah</button><button class="b d s" onclick="delGrup('${g.id}')">Hapus</button></div>`).join('')}</div>
+  <div class="card"><h2>2. Santri &amp; nomor absen</h2>${C.grp.length?`<div class="f"><select id="sg">${grpOpt}</select></div><textarea id="sn" placeholder="Ketik nama santri, satu nama per baris. Nomor absen otomatis berlanjut."></textarea><div style="margin-top:6px"><button class="b" onclick="addSantri()">Tambah santri ke kelompok</button></div>`:'<div class="empty">Buat kelompok dulu.</div>'}
+  ${C.stu.length?`<div style="margin:10px 0 0"><button class="b o s" onclick="renumber('az')">Nomor absen urut A–Z</button> <button class="b o s" onclick="renumber('no')">Rapikan nomor (1,2,3…)</button></div><small style="color:var(--mu)">Tekan nomor di kiri nama untuk mengubahnya.</small>`:''}
+  ${G.map(x=>`<div class="gh"><span>${esc(x.g.nama)}</span><span>${x.stu.length}</span></div>${x.stu.map(s=>`<div class="row"><button class="b o s" style="min-width:42px" onclick="setNo('${s.id}')">${s.no||'?'}</button><span class="nm">${esc(s.nama)}</span><select style="width:100px" onchange="moveS('${s.id}',this.value)">${C.grp.map(g=>`<option value="${g.id}" ${g.id===s.kelompokId?'selected':''}>${esc(g.nama)}</option>`).join('')}</select><button class="b o s" onclick="ren('${s.id}','Nama santri')">Ubah</button><button class="b d s" onclick="delS('${s.id}')">✕</button></div>`).join('')}`).join('')}</div>
+  <div class="card"><h2>3. Kegiatan absensi harian</h2><div class="chk" style="margin-bottom:8px"><input type="checkbox" ${DB.set.absensi?'checked':''} onchange="DB.set.absensi=this.checked;save();render()">Gunakan fitur absensi (matikan jika aplikasi hanya untuk nilai &amp; khatam)</div>
+  ${DB.set.absensi?`<div class="f"><input id="nk" placeholder="Contoh: Sholat Subuh, Ngaji, Pelajaran"><button class="b" onclick="addKeg()">Tambah</button></div>
+  ${C.keg.map(g=>`<div class="row"><span class="nm">${esc(g.nama)}</span><label class="chk"><input type="checkbox" ${g.rapor!==false?'checked':''} onchange="togKeg('${g.id}',this.checked)">Masuk rapor</label><button class="b o s" onclick="ren('${g.id}','Nama kegiatan')">Ubah</button><button class="b d s" onclick="delKeg('${g.id}')">Hapus</button></div>`).join('')}`:''}</div>
+  <div class="card"><h2>4. Fan &amp; kitab</h2><div class="f"><input id="nf" list="fl" placeholder="Fan (mis. Nahwu)"><datalist id="fl">${fans.map(f=>`<option value="${esc(f)}">`).join('')}</datalist><input id="nkt" placeholder="Nama kitab"></div>
+  <div class="f"><label class="chk"><input type="checkbox" id="npk">Fan pokok ★</label><button class="b" onclick="addKitab()">Tambah kitab</button></div>
+  <small style="color:var(--mu)">Kitab bertanda ★ masuk Rata-rata Fan Pokok dan juga Rata-rata Fan Seluruh. Khatam tidak memengaruhi nilai.</small>
+  ${fans.map(f=>`<div class="gh"><span>${esc(f)}</span></div>${C.kit.filter(k=>k.fan===f).map(k=>`<div class="row"><span class="nm">${esc(k.nama)}</span><label class="chk"><input type="checkbox" ${k.pokok?'checked':''} onchange="togPokok('${k.id}',this.checked)">Pokok ★</label><button class="b o s" onclick="ren('${k.id}','Nama kitab')">Ubah</button><button class="b d s" onclick="delKitab('${k.id}')">Hapus</button></div>`).join('')}`).join('')}</div>`;
+}
+function addGrup(){const n=$('#ng').value.trim();if(!n)return;put('kelompok',{kelasId:DB.cls,nama:n,t:Date.now()});render()}
+function delGrup(id){const C=ctx();if(C.stu.some(s=>s.kelompokId===id))return alert('Pindahkan dulu semua santri dari kelompok ini.');if(confirm('Hapus kelompok ini?')){del(id);render()}}
+function addSantri(){const g=$('#sg').value,t=$('#sn').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!t.length)return toast('Isi nama santri');
+  const C=ctx();let no=Math.max(0,...C.stu.map(s=>s.no||0));t.forEach(n=>{no++;put('santri',{kelasId:DB.cls,kelompokId:g,nama:n,no,t:Date.now()})});toast(t.length+' santri ditambahkan');render()}
+function moveS(id,g){const r=DB.recs[id];put('santri',Object.assign({},r.data,{kelompokId:g}),id);render()}
+function setNo(id){
+  const C=ctx(),s=C.stu.find(x=>x.id===id);const v=prompt('Nomor absen untuk '+s.nama,s.no);if(v===null)return;
+  const n=parseInt(v,10);if(!(n>=1))return alert('Nomor harus angka 1 atau lebih.');
+  const o=C.stu.find(x=>x.no===n&&x.id!==id);
+  if(o){if(!confirm('Nomor '+n+' dipakai '+o.nama+'. Tukar nomor?'))return;put('santri',Object.assign({},DB.recs[o.id].data,{no:s.no}),o.id)}
+  put('santri',Object.assign({},DB.recs[id].data,{no:n}),id);render()}
+function renumber(mode){const C=ctx();const l=C.stu.slice().sort(mode==='az'?(a,b)=>a.nama.localeCompare(b.nama):noSort);
+  if(!confirm('Ubah nomor absen semua santri kelas ini?'))return;l.forEach((s,i)=>{if(s.no!==i+1)put('santri',Object.assign({},DB.recs[s.id].data,{no:i+1}),s.id)});render()}
+function delS(id){if(confirm('Hapus santri ini beserta nilainya?')){del(id);Object.values(DB.recs).forEach(r=>{if(!r.deleted&&r.kind==='nilai'&&r.data.santriId===id)del(r.id)});render()}}
+function addKeg(){const n=$('#nk').value.trim();if(!n)return;put('kegiatan',{kelasId:DB.cls,nama:n,rapor:true,t:Date.now()});render()}
+function togKeg(id,on){const r=DB.recs[id];put('kegiatan',Object.assign({},r.data,{rapor:on}),id)}
+function delKeg(id){if(confirm('Hapus kegiatan beserta riwayat absensinya?')){del(id);Object.values(DB.recs).forEach(r=>{if(!r.deleted&&r.kind==='absensi'&&r.data.kegiatanId===id)del(r.id)});render()}}
+function addKitab(){const f=$('#nf').value.trim(),n=$('#nkt').value.trim();if(!f||!n)return toast('Isi fan dan kitab');put('kitab',{kelasId:DB.cls,fan:f,nama:n,pokok:$('#npk').checked,t:Date.now()});render()}
+function togPokok(id,on){const r=DB.recs[id];put('kitab',Object.assign({},r.data,{pokok:on}),id)}
+function delKitab(id){if(confirm('Hapus kitab beserta nilai & khatamnya?')){del(id);Object.values(DB.recs).forEach(r=>{if(!r.deleted&&r.kind==='nilai'&&r.data.kitabId===id)del(r.id)});render()}}
+function delKelas(){if(!confirm('Hapus kelas ini beserta SEMUA kelompok, santri, absensi, dan nilainya?'))return;if(!confirm('Yakin? Tindakan ini tidak bisa dibatalkan.'))return;
+  Object.values(DB.recs).forEach(r=>{if(!r.deleted&&(r.id===DB.cls||r.data.kelasId===DB.cls))del(r.id)});DB.cls=null;render()}
+
+/* ===== Absensi ===== */
+const ab={keg:'',tgl:today(),draft:{},key:'',exId:null};
+function loadDraft(C){
+  const ex=C.abs.find(a=>a.kegiatanId===ab.keg&&a.tanggal===ab.tgl);ab.exId=ex?ex.id:null;
+  ab.draft=ex?Object.assign({},ex.status):{};
+  C.stu.forEach(s=>{if(!ab.draft[s.id])ab.draft[s.id]='H'});ab.key=ab.keg+'|'+ab.tgl+'|'+DB.cls;
+}
+function absen(){
+  const C=ctx();
+  if(!C.stu.length)return `<div class="card empty">Tambahkan kelompok dan santri di tab Kelas.</div>`;
+  if(!C.keg.length)return `<div class="card empty">Buat kegiatan absensi (mis. Sholat Subuh) di tab Kelas.</div>`;
+  if(!C.keg.find(k=>k.id===ab.keg))ab.keg=C.keg[0].id;
+  if(ab.key!==ab.keg+'|'+ab.tgl+'|'+DB.cls)loadDraft(C);
+  const B=blocks(C,DB.set.ord);
+  const hist=C.abs.sort((a,b)=>b.tanggal.localeCompare(a.tanggal)).slice(0,20);
+  return `<div class="card"><h2>Absensi</h2><div class="f"><select onchange="ab.keg=this.value;render()">${C.keg.map(k=>`<option value="${k.id}" ${k.id===ab.keg?'selected':''}>${esc(k.nama)}</option>`).join('')}</select><input type="date" value="${ab.tgl}" onchange="ab.tgl=this.value||today();render()"></div>
+  ${ordChips()}
+  <div style="color:var(--mu);font-size:13px">${ab.exId?'Absensi tanggal ini sudah tersimpan – Anda sedang mengedit.':'Sesi baru: semua santri otomatis Hadir. Ubah yang tidak hadir saja.'}</div>
+  <div id="cnt" style="margin:6px 0;font-weight:600"></div>
+  <div class="f"><button class="b o" onclick="allH()">Semua Hadir</button><button class="b" onclick="saveAb()">Simpan absensi</button></div>
+  ${B.map(x=>`<div class="gh"><span>${esc(x.g.nama)}</span><span>${x.stu.length}</span></div>${x.stu.map(s=>`<div class="row" data-s="${s.id}"><span class="nm"><span class="no">${s.no||''}</span> ${esc(s.nama)}${x.flat?` <small>${esc(grpName(C,s))}</small>`:''}</span><span class="st">${['H','S','I','A'].map(v=>`<button class="${v}${ab.draft[s.id]===v?' on':''}" onclick="setSt('${s.id}','${v}')">${v}</button>`).join('')}</span></div>`).join('')}`).join('')}
+  <div style="margin-top:10px"><button class="b" style="width:100%" onclick="saveAb()">Simpan absensi</button></div><small style="color:var(--mu)">H Hadir · S Sakit · I Izin · A Alpa</small></div>
+  ${hist.length?`<div class="card"><h2>Riwayat absensi</h2>${hist.map(a=>{const k=C.keg.find(x=>x.id===a.kegiatanId);if(!k)return'';const c={H:0,S:0,I:0,A:0};Object.values(a.status).forEach(v=>c[v]!==undefined&&c[v]++);return`<div class="row"><span class="nm">${tgl(a.tanggal)} · ${esc(k.nama)}<br><small>H${c.H} S${c.S} I${c.I} A${c.A}</small></span><button class="b o s" onclick="openAb('${a.kegiatanId}','${a.tanggal}')">Edit</button><button class="b d s" onclick="delAb('${a.id}')">Hapus</button></div>`}).join('')}</div>`:''}`;
+}
+function setSt(id,v){ab.draft[id]=v;const r=document.querySelector(`[data-s="${id}"]`);if(r)r.querySelectorAll('.st button').forEach(b=>b.classList.toggle('on',b.textContent===v));updCount()}
+function allH(){Object.keys(ab.draft).forEach(k=>ab.draft[k]='H');render()}
+function updCount(){const e=$('#cnt');if(!e)return;const ids=ctx().stu.map(s=>s.id),c={H:0,S:0,I:0,A:0};ids.forEach(i=>c[ab.draft[i]]++);e.innerHTML=`<span style="color:var(--H)">H ${c.H}</span> · <span style="color:var(--S)">S ${c.S}</span> · <span style="color:var(--I)">I ${c.I}</span> · <span style="color:var(--A)">A ${c.A}</span>`}
+function saveAb(){const C=ctx();const ex=C.abs.find(a=>a.kegiatanId===ab.keg&&a.tanggal===ab.tgl);const st={};C.stu.forEach(s=>st[s.id]=ab.draft[s.id]||'H');
+  put('absensi',{kelasId:DB.cls,kegiatanId:ab.keg,tanggal:ab.tgl,status:st},ex?ex.id:null);ab.key='';toast('Absensi tersimpan');render()}
+function openAb(k,t){ab.keg=k;ab.tgl=t;ab.key='';go('absen')}
+function delAb(id){if(confirm('Hapus absensi ini?')){del(id);ab.key='';render()}}
+
+/* ===== Imtihan (input nilai) ===== */
+const im={mode:'kitab',kit:'',san:''};
+function imRow(C,s,k,x){ // satu baris input nilai untuk (santri s, kitab k)
+  const n=getNil(C,k.id,s.id)||{},mx=DB.set.max;
+  return `<input class="nilai" type="number" inputmode="decimal" min="0" max="${mx}" step="any" value="${n.nilai==null?'':n.nilai}" placeholder="–" onchange="setNil('${s.id}','${k.id}',this)"><label class="chk"><input type="checkbox" ${n.khatam?'checked':''} onchange="setKh('${s.id}','${k.id}',this.checked)">Khatam</label>`}
+function imtihan(){
+  const C=ctx();
+  if(!C.stu.length)return `<div class="card empty">Tambahkan kelompok dan santri di tab Kelas.</div>`;
+  if(!C.kit.length)return `<div class="card empty">Tambahkan fan &amp; kitab di tab Kelas.</div>`;
+  if(!C.kit.find(k=>k.id===im.kit))im.kit=C.kit[0].id;
+  if(!C.stu.find(s=>s.id===im.san))im.san=blocks(C,DB.set.ord)[0].stu[0].id;
+  const fans=[...new Set(C.kit.map(k=>k.fan))],B=blocks(C,DB.set.ord),mx=DB.set.max;
+  const head=`<div class="chips"><button class="${im.mode==='kitab'?'on':''}" onclick="im.mode='kitab';render()">Input per kitab</button><button class="${im.mode==='santri'?'on':''}" onclick="im.mode='santri';render()">Input per santri</button></div>${ordChips()}`;
+  const note=`<small style="color:var(--mu)">Skala 0–${mx}. Kosongkan jika belum dinilai (tidak dihitung nol). Khatam hanya dicatat, tidak memengaruhi nilai.</small>`;
+  if(im.mode==='kitab')return `<div class="card"><h2>Input nilai &amp; khatam</h2>${head}
+  <select onchange="im.kit=this.value;render()">${fans.map(f=>`<optgroup label="${esc(f)}">${C.kit.filter(k=>k.fan===f).map(k=>`<option value="${k.id}" ${k.id===im.kit?'selected':''}>${esc(k.nama)}${k.pokok?' ★':''}</option>`).join('')}</optgroup>`).join('')}</select>
+  <div id="imavg" style="margin:8px 0;font-weight:600"></div>${note}
+  ${B.map(x=>`<div class="gh"><span>${esc(x.g.nama)}</span><span id="ga-${x.g.id}"></span></div>${x.stu.map(s=>{const k=C.kit.find(z=>z.id===im.kit);return`<div class="row"><span class="nm"><span class="no">${s.no||''}</span> ${esc(s.nama)}${x.flat?` <small>${esc(grpName(C,s))}</small>`:''}<br><small id="sa-${s.id}"></small></span>${imRow(C,s,k)}</div>`}).join('')}`).join('')}</div>`;
+  const flat=B.flatMap(x=>x.stu),ix=flat.findIndex(s=>s.id===im.san),s=C.stu.find(z=>z.id===im.san);
+  return `<div class="card"><h2>Input nilai &amp; khatam</h2>${head}
+  <div class="f"><button class="b o" onclick="stepSan(-1)">‹</button><select onchange="im.san=this.value;render()">${B.map(x=>`<optgroup label="${esc(x.g.nama)}">${x.stu.map(z=>`<option value="${z.id}" ${z.id===im.san?'selected':''}>${z.no||''}. ${esc(z.nama)}</option>`).join('')}</optgroup>`).join('')}</select><button class="b o" onclick="stepSan(1)">›</button></div>
+  <div id="imavg" style="margin:8px 0;font-weight:600"></div>${note}
+  ${fans.map(f=>`<div class="gh"><span>${esc(f)}</span></div>${C.kit.filter(k=>k.fan===f).map(k=>`<div class="row"><span class="nm">${esc(k.nama)}${k.pokok?' <b style="color:var(--g7)">★</b>':''}</span>${imRow(C,s,k)}</div>`).join('')}`).join('')}</div>`;
+}
+function stepSan(d){const C=ctx(),f=blocks(C,DB.set.ord).flatMap(x=>x.stu),i=f.findIndex(s=>s.id===im.san),j=i+d;if(j<0||j>=f.length)return toast(d<0?'Ini santri pertama':'Ini santri terakhir');im.san=f[j].id;render();window.scrollTo(0,0)}
+function setNil(sid,kid,el){
+  const C=ctx(),v=el.value.trim(),mx=DB.set.max;
+  if(v!==''&&(isNaN(v)||+v<0||+v>mx)){alert('Nilai harus antara 0 dan '+mx);const n=getNil(C,kid,sid);el.value=n&&n.nilai!=null?n.nilai:'';return}
+  const n=getNil(C,kid,sid);
+  put('nilai',{kelasId:DB.cls,kitabId:kid,santriId:sid,nilai:v===''?null:+v,khatam:n?!!n.khatam:false},n?n.id:null);updIm();
+}
+function setKh(sid,kid,on){const C=ctx(),n=getNil(C,kid,sid);
+  put('nilai',{kelasId:DB.cls,kitabId:kid,santriId:sid,nilai:n?n.nilai:null,khatam:on},n?n.id:null);updIm()}
+function updIm(){
+  const e=$('#imavg');if(!e)return;const C=ctx();
+  if(im.mode==='santri'){const st=stat(im.san,C);
+    e.textContent=`Rata-rata fan pokok: ${fmt(st.avP)} (${st.np} kitab) · Rata-rata fan seluruh: ${fmt(st.av)} (${st.nn} kitab) · Khatam: ${st.kh} dari ${C.kit.length}`;return}
+  const B=blocks(C,DB.set.ord);
+  const ns=C.nil.filter(n=>n.kitabId===im.kit&&validN(n,C)&&C.stu.find(s=>s.id===n.santriId));
+  const kh=C.nil.filter(n=>n.kitabId===im.kit&&n.khatam&&C.stu.find(s=>s.id===n.santriId)).length;
+  e.textContent=`Rata-rata kitab: ${fmt(mean(ns.map(n=>+n.nilai)))} (${ns.length} dari ${C.stu.length} santri bernilai) · Khatam: ${kh}`;
+  B.forEach(x=>{const el=document.getElementById('ga-'+x.g.id);if(el){const v=mean(x.stu.map(s=>{const n=getNil(C,im.kit,s.id);return n&&validN(n,C)?+n.nilai:null}));el.textContent='rata-rata '+fmt(v)}
+    x.stu.forEach(s=>{const e2=document.getElementById('sa-'+s.id);if(e2){const st=stat(s.id,C);e2.textContent='Pokok '+fmt(st.avP)+' · Seluruh '+fmt(st.av)+' · Khatam '+st.kh}})});
+}
+
+/* ===== Laporan ===== */
+const rp={sec:'nilai',bulan:'',scope:'kelas',kel:'',santri:'',hadir:true};
+const scopePred=()=>rp.scope==='kelompok'?s=>s.kelompokId===rp.kel:rp.scope==='santri'?s=>s.id===rp.santri:()=>true;
+const kelasNama=()=>{const k=all('kelas').find(k=>k.id===DB.cls);return k?k.nama:''};
+const periode=()=>rp.bulan?new Date(rp.bulan+'-01').toLocaleDateString('id-ID',{month:'long',year:'numeric'}):'Seluruh periode';
+function scopeTitle(C){const kn=kelasNama();
+  if(rp.scope==='kelompok'){const g=C.grp.find(x=>x.id===rp.kel);return 'Kelompok '+(g?g.nama:'')+' · Kelas '+kn}
+  if(rp.scope==='santri'){const s=C.stu.find(x=>x.id===rp.santri);return (s?s.nama:'')+' · Kelas '+kn}
+  return 'Kelas '+kn}
+function ttdHTML(){return `<div class="ttd"><div><div>&nbsp;</div><div>${esc(DB.set.ttd1)}</div><div class="ln"></div></div><div><div>${esc(DB.set.tempat||'……………………')}, ${tglPanjang()}</div><div>${esc(DB.set.ttd2)}</div><div class="ln"></div></div></div>`}
+function laporan(){
+  const C=ctx();
+  if(!DB.set.absensi&&rp.sec==='hadir')rp.sec='nilai';
+  if(!C.grp.find(g=>g.id===rp.kel))rp.kel=C.grp[0]?C.grp[0].id:'';
+  if(!C.stu.find(s=>s.id===rp.santri))rp.santri=C.stu[0]?C.stu[0].id:'';
+  const body=rp.sec==='hadir'?rekapHadir(C):rp.sec==='nilai'?rekapNilai(C):raporAll(C);
+  const B=blocks(C,DB.set.ord);
+  const selScope=rp.scope==='kelompok'?`<select onchange="rp.kel=this.value;render()">${C.grp.map(g=>`<option value="${g.id}" ${g.id===rp.kel?'selected':''}>${esc(g.nama)}</option>`).join('')}</select>`
+   :rp.scope==='santri'?`<select onchange="rp.santri=this.value;render()">${B.map(x=>`<optgroup label="${esc(x.g.nama)}">${x.stu.map(z=>`<option value="${z.id}" ${z.id===rp.santri?'selected':''}>${z.no||''}. ${esc(z.nama)}</option>`).join('')}</optgroup>`).join('')}</select>`:'';
+  return `<div class="card"><div class="chips"><button class="${rp.sec==='nilai'?'on':''}" onclick="rp.sec='nilai';render()">Rekap Nilai</button>${DB.set.absensi?`<button class="${rp.sec==='hadir'?'on':''}" onclick="rp.sec='hadir';render()">Rekap Kehadiran</button>`:''}<button class="${rp.sec==='rapor'?'on':''}" onclick="rp.sec='rapor';render()">Rapor Santri</button></div>
+  <div class="chips"><span style="align-self:center;font-size:13px;color:var(--mu)">Cakupan:</span><button class="${rp.scope==='kelas'?'on':''}" onclick="rp.scope='kelas';render()">1 kelas</button><button class="${rp.scope==='kelompok'?'on':''}" onclick="rp.scope='kelompok';render()">Kelompok tertentu</button><button class="${rp.scope==='santri'?'on':''}" onclick="rp.scope='santri';render()">Santri tertentu</button></div>
+  ${selScope?`<div class="f">${selScope}</div>`:''}
+  ${rp.scope!=='santri'?ordChips():''}
+  ${rp.sec!=='nilai'&&DB.set.absensi?`<div class="f"><input type="month" value="${rp.bulan}" onchange="rp.bulan=this.value;render()" title="Kosongkan untuk semua bulan"></div>`:''}
+  ${rp.sec==='rapor'&&DB.set.absensi?`<label class="chk" style="margin:6px 0"><input type="checkbox" ${rp.hadir?'checked':''} onchange="rp.hadir=this.checked;render()">Sertakan kehadiran kegiatan di rapor</label>`:''}
+  <small style="color:var(--mu)">Setiap laporan memuat dua tanda tangan. Tekan Cetak lalu simpan sebagai PDF${isNative()?' (akan dibagikan sebagai berkas PDF)':''}.</small>
+  <div style="margin:8px 0"><button class="b" onclick="cetak()">⎙ Cetak / Simpan PDF</button></div></div>
+  <div id="rep">${body}</div>`;
+}
+async function cetak(){
+  const h=$('#rep').innerHTML;if(!h.trim())return;
+  if(!isNative()){$('#print').innerHTML=h;setTimeout(()=>window.print(),150);return}
+  try{
+    toast('Menyiapkan PDF…');
+    const ok=await loadLib(()=>!!window.html2pdf,'vendor/html2pdf.bundle.min.js','https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js');
+    if(!ok)return alert('Pustaka PDF belum termuat. Pastikan APK dibangun dengan langkah "npm run build".');
+    const box=document.createElement('div');box.style.cssText='position:fixed;left:0;top:0;width:'+(rp.sec==='rapor'?794:1100)+'px;background:#fff;z-index:-1';box.innerHTML=h;document.body.appendChild(box);
+    const opt={margin:8,image:{type:'jpeg',quality:.95},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:rp.sec==='rapor'?'portrait':'landscape'},pagebreak:{mode:['css','avoid-all']}};
+    const uri=await html2pdf().set(opt).from(box).outputPdf('datauristring');document.body.removeChild(box);
+    await shareFile('laporan-'+rp.sec+'-'+today()+'.pdf',uri.split(',')[1],'application/pdf');
+  }catch(e){alert('Gagal membuat PDF: '+(e.message||e))}
+}
+function rekapHadir(C){
+  if(!C.stu.length)return '<div class="card empty">Belum ada santri.</div>';
+  const m=rp.bulan,bl=blocks(C,DB.set.ord,scopePred()),flat=bl.length&&bl[0].flat;
+  const sesi=C.abs.filter(a=>!m||a.tanggal.startsWith(m)).length,nc=flat?8:7;let allst=[];
+  const rows=bl.map(x=>{const st=x.stu.map(s=>({s,t:stat(s.id,C,m)}));allst=allst.concat(st);
+    return (flat?'':`<tr><th colspan="${nc}">Kelompok ${esc(x.g.nama)}</th></tr>`)+st.map(z=>`<tr><td class="c">${z.s.no||''}</td><td>${esc(z.s.nama)}</td>${flat?`<td>${esc(grpName(C,z.s))}</td>`:''}<td class="c">${z.t.c.H}</td><td class="c">${z.t.c.S}</td><td class="c">${z.t.c.I}</td><td class="c">${z.t.c.A}</td><td class="c">${pct(z.t.hp)}</td></tr>`).join('')+(flat||rp.scope==='santri'?'':`<tr><td colspan="${nc-1}"><b>Rata-rata kelompok ${esc(x.g.nama)}</b></td><td class="c"><b>${pct(mean(st.map(z=>z.t.hp)))}</b></td></tr>`)}).join('');
+  const fin=rp.scope==='santri'?'':(bl.length>1||flat)?`<tr><td colspan="${nc-1}"><b>Rata-rata ${rp.scope==='kelompok'?'kelompok':'kelas'}</b></td><td class="c"><b>${pct(mean(allst.map(z=>z.t.hp)))}</b></td></tr>`:'';
+  return `<div class="paper"><h2>REKAP KEHADIRAN SANTRI</h2><div class="sub">${esc(scopeTitle(C))} · ${esc(periode())} · ${sesi} sesi absensi</div>
+  <div class="sc"><table><tr><th class="c">No</th><th>Nama</th>${flat?'<th>Kelompok</th>':''}<th class="c">H</th><th class="c">S</th><th class="c">I</th><th class="c">A</th><th class="c">% Hadir</th></tr>${rows}${fin}</table></div>
+  <div style="font-size:12px;margin-top:6px">H Hadir, S Sakit, I Izin, A Alpa. Persentase = jumlah Hadir ÷ seluruh sesi tercatat.</div>${ttdHTML()}</div>`;
+}
+function rekapNilai(C){
+  if(!C.stu.length||!C.kit.length)return '<div class="card empty">Belum ada santri atau kitab.</div>';
+  const bl=blocks(C,DB.set.ord,scopePred()),flat=bl.length&&bl[0].flat,rk=rankNilai(C),nc=2+(flat?1:0)+C.kit.length+4;let allst=[];
+  const head=`<tr><th class="c">No</th><th>Nama</th>${flat?'<th>Kelompok</th>':''}${C.kit.map(k=>`<th class="c">${esc(k.nama)}${k.pokok?' ★':''}<br><small>${esc(k.fan)}</small></th>`).join('')}<th class="c">Rata-rata<br>Fan Pokok</th><th class="c">Rata-rata<br>Fan Seluruh</th><th class="c">Khatam</th><th class="c">Peringkat</th></tr>`;
+  const rows=bl.map(x=>{allst=allst.concat(x.stu);
+    return (flat?'':`<tr><th colspan="${nc}">Kelompok ${esc(x.g.nama)}</th></tr>`)+x.stu.map(s=>{const st=stat(s.id,C);return `<tr><td class="c">${s.no||''}</td><td>${esc(s.nama)}</td>${flat?`<td>${esc(grpName(C,s))}</td>`:''}${C.kit.map(k=>{const n=getNil(C,k.id,s.id);return`<td class="c">${n&&validN(n,C)?fmt(+n.nilai):'–'}${n&&n.khatam?' ✓':''}</td>`}).join('')}<td class="c"><b>${fmt(st.avP)}</b></td><td class="c"><b>${fmt(st.av)}</b></td><td class="c">${st.kh}</td><td class="c">${rk[s.id]||'–'}</td></tr>`}).join('')
+    +(flat||rp.scope==='santri'?'':(g=>`<tr><td colspan="${nc-4}"><b>Rata-rata kelompok ${esc(x.g.nama)}</b> <small>(${g.nn} dari ${g.n} santri bernilai)</small></td><td class="c"><b>${fmt(g.avP)}</b></td><td class="c"><b>${fmt(g.av)}</b></td><td class="c">${g.kh}</td><td></td></tr>`)(grpStat(x.stu,C)))}).join('');
+  const fin=rp.scope==='santri'?'':(bl.length>1||flat)?(g=>`<tr><td colspan="${nc-4}"><b>Rata-rata ${rp.scope==='kelompok'?'kelompok':'kelas'}</b> <small>(${g.nn} dari ${g.n} santri bernilai)</small></td><td class="c"><b>${fmt(g.avP)}</b></td><td class="c"><b>${fmt(g.av)}</b></td><td class="c">${g.kh}</td><td></td></tr>`)(grpStat(allst,C)):'';
+  return `<div class="paper"><h2>REKAP NILAI &amp; KHATAM</h2><div class="sub">${esc(scopeTitle(C))}</div><div class="sc"><table>${head}${rows}${fin}</table></div>
+  <div style="font-size:12px;margin-top:6px">★ = fan pokok. ✓ = khatam (hanya informasi, tidak memengaruhi nilai). Nilai kosong tidak dihitung nol. Peringkat berdasarkan rata-rata fan seluruh se-kelas.</div>${ttdHTML()}</div>`;
+}
+function raporAll(C){
+  if(!C.stu.length)return '<div class="card empty">Belum ada santri.</div>';
+  const list=blocks(C,DB.set.ord,scopePred()).flatMap(x=>x.stu);
+  if(!list.length)return '<div class="card empty">Tidak ada santri pada cakupan ini.</div>';
+  return list.map(s=>rapor(s,C)).join('');
+}
+function rapor(s,C){
+  const g=C.grp.find(x=>x.id===s.kelompokId),st=stat(s.id,C,rp.bulan,true);
+  const showH=DB.set.absensi&&rp.hadir&&C.keg.some(k=>k.rapor!==false);
+  const kit=C.kit.map((k,i)=>{const n=getNil(C,k.id,s.id);return`<tr><td class="c">${i+1}</td><td>${esc(k.fan)}</td><td>${esc(k.nama)}${k.pokok?' ★':''}</td><td class="c">${n&&validN(n,C)?fmt(+n.nilai):'–'}</td><td class="c">${n&&n.khatam?'Khatam':'Belum'}</td></tr>`}).join('');
+  const kg=C.keg.filter(k=>k.rapor!==false).map(k=>{const c={H:0,S:0,I:0,A:0};C.abs.filter(a=>a.kegiatanId===k.id&&(!rp.bulan||a.tanggal.startsWith(rp.bulan))).forEach(a=>{const v=a.status[s.id];if(v)c[v]++});return`<tr><td>${esc(k.nama)}</td><td class="c">${c.H}</td><td class="c">${c.S}</td><td class="c">${c.I}</td><td class="c">${c.A}</td></tr>`}).join('');
+  return `<section class="paper rapor"><div class="ijz"><div class="ijz-in">
+  <div class="ijz-bsm">بسم الله الرحمن الرحيم</div>
+  <div class="ijz-ttl">LAPORAN HASIL BELAJAR<br>${showH?'&amp; KEHADIRAN SANTRI':'SANTRI'}</div>
+  <div class="ijz-orn">❖ ❖ ❖</div>
+  <div class="ijz-sub">Diberikan kepada</div>
+  <div class="ijz-nama">${esc(s.nama)}</div>
+  <div class="ijz-info">Kelompok ${esc(g?g.nama:'-')} &nbsp;·&nbsp; Kelas ${esc(kelasNama())}${showH&&rp.bulan?' &nbsp;·&nbsp; '+esc(periode()):''}</div>
+  <h3>A. NILAI UJIAN DAN KHATAM KITAB</h3>
+  <table><tr><th class="c" style="width:34px">No</th><th>Fan</th><th>Kitab</th><th class="c" style="width:60px">Nilai</th><th class="c" style="width:76px">Khatam</th></tr>${kit||'<tr><td colspan="5" class="c">Belum ada kitab</td></tr>'}
+  <tr class="avg"><td colspan="3">Rata-rata Fan Pokok ★ <span style="font-weight:400">(${st.np} kitab)</span></td><td class="c">${fmt(st.avP)}</td><td></td></tr>
+  <tr class="avg"><td colspan="3">Rata-rata Fan Seluruh <span style="font-weight:400">(${st.nn} kitab)</span></td><td class="c">${fmt(st.av)}</td><td></td></tr></table>
+  <div class="note">★ Fan pokok. Jumlah kitab khatam: <b>${st.kh}</b> dari ${C.kit.length} kitab (keterangan khatam tidak memengaruhi nilai).</div>
+  ${showH?`<h3>B. KEHADIRAN KEGIATAN</h3><table><tr><th>Kegiatan</th><th class="c">Hadir</th><th class="c">Sakit</th><th class="c">Izin</th><th class="c">Alpa</th></tr>${kg}<tr class="avg"><td>Jumlah</td><td class="c">${st.c.H}</td><td class="c">${st.c.S}</td><td class="c">${st.c.I}</td><td class="c">${st.c.A}</td></tr></table>`:''}
+  ${ttdHTML()}
+  </div></div></section>`;
+}
+
+/* ===== Pengaturan ===== */
+function pengaturan(){
+  return `<div class="card"><h2>Akun &amp; sinkron Supabase</h2><div id="sbmsg" style="margin-bottom:6px;color:var(--mu)">${user?'Masuk sebagai '+esc(user.email):'Belum masuk. Aplikasi tetap berjalan offline.'}</div>
+  <input id="cu" placeholder="Project URL (https://xxxx.supabase.co)" value="${esc(CFG.url||'')}" style="margin-bottom:6px"><input id="ck" placeholder="Anon / publishable key" value="${esc(CFG.key||'')}" style="margin-bottom:6px">
+  <button class="b o" onclick="saveCfg()">Simpan koneksi</button>
+  ${user?`<div style="margin-top:8px"><button class="b" onclick="startSync()">Sinkron sekarang</button> <button class="b d" onclick="logout()">Keluar</button></div>`:`<h3>Masuk</h3><input id="em" type="email" placeholder="Email" style="margin-bottom:6px"><input id="pw" type="password" placeholder="Kata sandi (min. 6 karakter)" style="margin-bottom:6px"><button class="b" onclick="login()">Masuk</button> <button class="b o" onclick="signup()">Daftar akun baru</button>`}</div>
+  <div class="card"><h2>Rapor &amp; nilai</h2><label class="l">Nilai maksimum</label><input id="smx" type="number" value="${DB.set.max}"><label class="l">Tanda tangan kiri (wali kelas)</label><input id="st1" value="${esc(DB.set.ttd1)}"><label class="l">Tanda tangan kanan (pimpinan)</label><input id="st2" value="${esc(DB.set.ttd2)}"><label class="l">Tempat penerbitan (opsional, mis. Kediri)</label><input id="stp" value="${esc(DB.set.tempat)}"><div style="margin-top:8px"><button class="b" onclick="saveSet()">Simpan</button></div></div>
+  <div class="card"><h2>Cadangan data</h2><div class="f"><button class="b o" onclick="backup()">Unduh cadangan (JSON)</button><label class="b o" style="text-align:center;cursor:pointer">Pulihkan<input type="file" accept=".json,application/json" hidden onchange="restore(this.files[0])"></label></div>
+  <button class="b d s" onclick="wipe()">Hapus data di perangkat ini</button></div>
+  <div class="card"><small style="color:var(--mu)">Maktab Class Manager v2 · data tersimpan lokal di perangkat dan disalin ke Supabase saat online dan sudah masuk akun.</small></div>`;
+}
+function saveCfg(){CFG={url:$('#cu').value.trim(),key:$('#ck').value.trim()};localStorage.setItem(CF,JSON.stringify(CFG));toast('Koneksi disimpan');connect().then(render)}
+function sbMsg(t){const e=$('#sbmsg');if(e)e.textContent=t}
+async function login(){if(!sb)return sbMsg('Simpan Project URL dan key dulu.');const{data,error}=await sb.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#pw').value});if(error)return sbMsg('Gagal masuk: '+error.message);user=data.user;await startSync();render()}
+async function signup(){if(!sb)return sbMsg('Simpan Project URL dan key dulu.');const{data,error}=await sb.auth.signUp({email:$('#em').value.trim(),password:$('#pw').value});if(error)return sbMsg('Gagal daftar: '+error.message);if(data.session){user=data.user;await startSync();render()}else sbMsg('Akun dibuat. Cek email untuk konfirmasi (atau nonaktifkan konfirmasi email di Supabase), lalu tekan Masuk.')}
+async function logout(){await sb.auth.signOut();user=null;if(chan){sb.removeChannel(chan);chan=null}setStatus('Mode offline – belum masuk akun');render()}
+function saveSet(){Object.assign(DB.set,{max:+$('#smx').value||100,ttd1:$('#st1').value.trim()||DEF.ttd1,ttd2:$('#st2').value.trim()||DEF.ttd2,tempat:$('#stp').value.trim()});save();toast('Tersimpan')}
+async function backup(){const t=JSON.stringify({recs:DB.recs,set:DB.set});await shareFile('maktab-cadangan-'+today()+'.json',btoa(unescape(encodeURIComponent(t))),'application/json')}
+function restore(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);Object.values(d.recs||{}).forEach(x=>{DB.recs[x.id]=x;if(!DB.queue.includes(x.id))DB.queue.push(x.id)});if(d.set)DB.set=Object.assign({},DB.set,d.set);save();flush();toast('Data dipulihkan');render()}catch(e){alert('Berkas cadangan tidak valid')}};r.readAsText(f)}
+function wipe(){if(confirm('Hapus semua data di perangkat ini? Data di Supabase tidak ikut terhapus.')&&confirm('Yakin?')){DB={recs:{},queue:[],cls:null,pushed:false,set:DB.set};save();render()}}
+
+/* ===== Mulai ===== */
+if('serviceWorker' in navigator&&!isNative()&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+render();connect();
+</script>
+</body>
+</html>
