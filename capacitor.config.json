@@ -1,0 +1,6 @@
+{
+  "appId": "com.maktab.classmanager",
+  "appName": "Maktab",
+  "webDir": "www",
+  "android": { "allowMixedContent": false }
+}
