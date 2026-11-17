@@ -7,75 +7,78 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#14532d">
+<meta name="theme-color" content="#0a0a0a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <style>
-:root{--g9:#14532d;--g7:#1f7a45;--g3:#cfe8d8;--g1:#eef7f1;--bg:#f6f8f6;--card:#fff;--tx:#17211b;--mu:#5d6d63;--ln:#dbe5de;--H:#1f7a45;--S:#b7791f;--I:#2b6cb0;--A:#c53030}
-@media(prefers-color-scheme:dark){:root{--g9:#0d3a20;--g7:#4cae78;--g3:#24402f;--g1:#16231b;--bg:#0f1612;--card:#17211b;--tx:#e8f0ea;--mu:#9bb0a3;--ln:#2a3a31;--H:#4cae78;--S:#e0a63e;--I:#63a4e8;--A:#ef6b6b}}
+:root{--g9:#0a0a0a;--g7:#111;--on:#fff;--g3:#e6e6e6;--g1:#f3f3f3;--bg:#fafafa;--card:#fff;--tx:#111;--mu:#6a6a6a;--ln:#d9d9d9;--H:#111;--S:#555;--I:#8c8c8c;--A:#111}
+@media(prefers-color-scheme:dark){:root{--g9:#000;--g7:#f2f2f2;--on:#000;--g3:#2b2b2b;--g1:#171717;--bg:#0a0a0a;--card:#121212;--tx:#f2f2f2;--mu:#9b9b9b;--ln:#2c2c2c;--H:#f2f2f2;--S:#b5b5b5;--I:#7a7a7a;--A:#f2f2f2}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
-body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:calc(68px + env(safe-area-inset-bottom))}
-header{position:sticky;top:0;z-index:5;background:var(--g9);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;display:flex;gap:8px;align-items:center}
-header h1{font-size:16px;margin:0;flex:1;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-header select{max-width:42%;background:#ffffff22;color:#fff;border:1px solid #ffffff55;border-radius:8px;padding:6px}
+body{font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:5;background:var(--g9);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;display:flex;gap:8px;align-items:center;border-bottom:1px solid #333}
+header h1{font:700 14px Georgia,"Times New Roman",serif;letter-spacing:2.5px;text-transform:uppercase;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header select{max-width:42%;background:transparent;color:#fff;border:1px solid #ffffff66;border-radius:4px;padding:6px}
 header select option{color:#000}
-header button{background:#ffffff22;color:#fff;border:1px solid #ffffff55;border-radius:8px;padding:6px 10px;font-size:15px}
-#stat{font-size:11px;background:var(--g1);color:var(--mu);padding:3px 12px;text-align:right}
+header button{background:transparent;color:#fff;border:1px solid #ffffff66;border-radius:4px;padding:6px 10px;font-size:15px}
+#stat{font-size:11px;background:var(--g1);color:var(--mu);padding:3px 12px;text-align:right;border-bottom:1px solid var(--ln)}
 main{max-width:920px;margin:0 auto;padding:12px}
-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--ln);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:5}
-nav button{flex:1;border:0;background:none;padding:10px 2px;color:var(--mu);font-size:12px;font-weight:600}
-nav button.on{color:var(--g7);box-shadow:inset 0 3px 0 var(--g7)}
-nav b{display:block;font-size:19px;font-weight:400}
-.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:12px;margin-bottom:12px}
-h2{font-size:16px;margin:0 0 8px;color:var(--g7)} h3{font-size:14px;margin:10px 0 6px}
-input,select,textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--ln);border-radius:8px;padding:8px;width:100%}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--tx);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;border:0;background:none;padding:9px 2px;color:var(--mu);font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+nav button.on{color:var(--tx);box-shadow:inset 0 3px 0 var(--tx)}
+nav b{display:block;font-size:18px;font-weight:400}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:4px;padding:14px;margin-bottom:12px}
+h2{font:700 12.5px Georgia,"Times New Roman",serif;letter-spacing:2px;text-transform:uppercase;margin:0 0 10px;padding-bottom:7px;border-bottom:1px solid var(--tx);color:var(--tx)}
+h3{font-size:13px;margin:10px 0 6px;letter-spacing:.5px}
+input,select,textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--ln);border-radius:4px;padding:8px;width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--tx);outline-offset:-1px}
 textarea{min-height:90px}
-label.l{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
+label.l{display:block;font-size:12px;color:var(--mu);margin:8px 0 3px;letter-spacing:.4px}
 .f{display:flex;gap:6px;margin-bottom:6px;align-items:center}.f>*{flex:1}.f>button{flex:0 0 auto}
-button.b{background:var(--g7);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-weight:600;font-size:14px}
-button.b.o{background:none;color:var(--g7);border:1px solid var(--g7)} button.b.d{background:var(--A)} button.b.s{padding:5px 9px;font-size:12px}
+button.b{background:var(--g7);color:var(--on);border:1px solid var(--g7);border-radius:4px;padding:9px 14px;font-weight:600;font-size:13px;letter-spacing:.3px}
+button.b.o,label.b.o{background:none;color:var(--tx);border:1px solid var(--tx)} button.b.d{background:none;color:var(--tx);border:1px dashed var(--tx)} button.b.s{padding:5px 9px;font-size:12px}
+label.b{display:block;border-radius:4px;padding:9px 14px;font-weight:600;font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
-.kpi{background:var(--g1);border-radius:10px;padding:10px}.kpi b{font-size:22px;display:block;color:var(--g7)}.kpi span{font-size:12px;color:var(--mu)}
-.gh{background:var(--g3);padding:6px 10px;border-radius:8px;margin:10px 0 4px;font-weight:700;display:flex;justify-content:space-between;gap:8px}
-.row{display:flex;align-items:center;gap:6px;padding:6px 2px;border-bottom:1px solid var(--ln)}
+.kpi{border:1px solid var(--ln);border-radius:4px;padding:10px;background:var(--card)}.kpi b{font:700 24px Georgia,"Times New Roman",serif;display:block;color:var(--tx)}.kpi span{font-size:11.5px;color:var(--mu);letter-spacing:.3px}
+.gh{background:var(--g1);border-left:3px solid var(--tx);padding:6px 10px;margin:12px 0 4px;font-weight:700;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;display:flex;justify-content:space-between;gap:8px}
+.row{display:flex;align-items:center;gap:6px;padding:7px 2px;border-bottom:1px solid var(--ln)}
 .row .nm{flex:1;min-width:0}.row small{color:var(--mu)}
-.no{display:inline-block;min-width:26px;color:var(--g7);font-weight:700}
-.st{display:flex;gap:4px}.st button{width:40px;height:38px;border-radius:8px;border:1px solid var(--ln);background:var(--card);color:var(--mu);font-weight:700}
-.st button.on{color:#fff;border-color:transparent}.st .H.on{background:var(--H)}.st .S.on{background:var(--S)}.st .I.on{background:var(--I)}.st .A.on{background:var(--A)}
+.no{display:inline-block;min-width:26px;color:var(--tx);font-weight:700;font-family:Georgia,serif}
+.st{display:flex;gap:4px}.st button{width:40px;height:38px;border-radius:4px;border:1px solid var(--ln);background:var(--card);color:var(--mu);font-weight:700}
+.st button.on{color:var(--on);border-color:transparent}.st .H.on{background:var(--H)}.st .S.on{background:var(--S)}.st .I.on{background:var(--I)}
+.st .A.on{background:var(--card);color:var(--tx);border:2px solid var(--tx)}
 .nilai{width:78px;text-align:center;font-weight:700}
-.chk{display:flex;align-items:center;gap:5px;font-size:12px;white-space:nowrap}.chk input{width:20px;height:20px;padding:0}
-.bar{height:10px;background:var(--g3);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g7)}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.chips button{border:1px solid var(--g7);background:none;color:var(--g7);border-radius:20px;padding:6px 12px;font-weight:600;font-size:13px}.chips button.on{background:var(--g7);color:#fff}
+.chk{display:flex;align-items:center;gap:5px;font-size:12px;white-space:nowrap}.chk input{width:20px;height:20px;padding:0;accent-color:var(--tx)}
+.bar{height:6px;background:var(--g3);overflow:hidden}.bar i{display:block;height:100%;background:var(--tx)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.chips button{border:1px solid var(--tx);background:none;color:var(--tx);border-radius:3px;padding:6px 12px;font-weight:600;font-size:12.5px;letter-spacing:.3px}.chips button.on{background:var(--tx);color:var(--bg)}
 .sc{overflow-x:auto}
 table{border-collapse:collapse;width:100%}th,td{border:1px solid var(--ln);padding:5px 7px;text-align:left;font-size:13px}th{background:var(--g1)}td.c,th.c{text-align:center}
 .paper{background:#fff;color:#000;border:1px solid var(--ln);padding:16px;margin-bottom:12px;overflow-x:auto;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.paper table th{background:#e6f0e9;color:#000}.paper td,.paper th{border-color:#333;color:#000}
-.paper h2{color:#000;text-align:center;font-size:15px;margin:0 0 2px}.paper .sub{text-align:center;font-size:12px;margin-bottom:10px}
-.paper .ttd{display:flex;justify-content:space-between;gap:20px;margin-top:22px;text-align:center;font-size:13px;page-break-inside:avoid}.paper .ttd>div{flex:1}.paper .ttd .ln{margin:60px auto 0;border-bottom:1px solid #000;width:75%}
-/* Rapor ala ijazah */
-.rapor{font-family:Georgia,"Times New Roman",serif;padding:10px;width:100%;min-width:640px}
-.ijz{border:7px double #14532d;padding:5px}
-.ijz-in{border:1.5px solid #b08a2e;padding:20px 26px 18px;position:relative;background:#fff}
-.ijz-in:before,.ijz-in:after{content:"❖";position:absolute;color:#b08a2e;font-size:16px;line-height:1}
-.ijz-in:before{top:4px;left:7px}.ijz-in:after{top:4px;right:7px}
-.ijz-bsm{text-align:center;font-size:20px;color:#14532d;direction:rtl;margin-bottom:6px}
-.ijz-ttl{text-align:center;font-weight:700;font-size:21px;letter-spacing:2px;color:#14532d;line-height:1.25}
-.ijz-orn{text-align:center;color:#b08a2e;letter-spacing:8px;margin:5px 0 8px;font-size:13px}
-.ijz-sub{text-align:center;font-style:italic;font-size:13px}
-.ijz-nama{text-align:center;font-size:27px;font-style:italic;font-weight:700;margin:4px auto 2px;border-bottom:1.5px dotted #b08a2e;padding:0 10px 3px;max-width:88%;color:#000}
-.ijz-info{text-align:center;font-size:13px;margin-bottom:10px}
-.rapor h3{color:#14532d;font-size:13px;margin:12px 0 5px;letter-spacing:.6px;border:0;text-transform:none}
-.rapor table th{background:#14532d;color:#fff!important;border-color:#14532d;font-weight:600}
-.rapor td{font-size:13px}
-.rapor tr.avg td{background:#f3ecd6;font-weight:700}
-.rapor .note{font-size:11px;color:#444;margin-top:4px;font-family:system-ui,sans-serif}
-.rapor:last-child{page-break-after:auto}
-.rapor{page-break-after:always}
+.paper table th{background:#111;color:#fff;font-weight:600}.paper td,.paper th{border-color:#000;color:#000}.paper table th{color:#fff}
+.paper tr.gr th{background:#d9d9d9;color:#000;text-align:left;letter-spacing:.5px}
+.paper h2{color:#000;text-align:center;font-size:14px;margin:0 0 2px;border:0;letter-spacing:2px}.paper .sub{text-align:center;font-size:12px;margin-bottom:10px}
+.paper .ttd{display:flex;justify-content:space-between;gap:24px;margin-top:20px;text-align:center;font-size:12.5px;page-break-inside:avoid}.paper .ttd>div{flex:1}.paper .ttd .ln{margin:54px auto 0;border-bottom:1px solid #000;width:78%}
+/* Rapor A4 (monokrom) */
+.paper.rapor{width:718px;padding:0;margin:0 auto 14px;border:0;box-shadow:0 0 0 1px var(--ln);zoom:var(--z,1);overflow:visible;font-family:Georgia,"Times New Roman",serif}
+.ijz{border:3px double #000;padding:4px}
+.ijz-in{border:.75pt solid #000;padding:16px 22px 14px}
+.ijz-bsm{text-align:center;font-size:19px;direction:rtl;margin-bottom:2px}
+.ijz-ttl{text-align:center;font-weight:700;font-size:19px;letter-spacing:3px;line-height:1.3}
+.ijz-ttl span{display:block;font-size:12.5px;letter-spacing:4px;font-weight:400;margin-top:2px}
+.ijz-rule{display:flex;align-items:center;gap:8px;margin:8px 0 10px;font-size:10px;color:#000}.ijz-rule i{flex:1;border-top:1px solid #000;height:0}
+.paper table.ijz-id{border:0;width:100%;margin:0 0 4px}.ijz-id td{border:0!important;padding:1.5px 4px;font-size:13px}
+.rapor h3{font:700 11.5px Georgia,"Times New Roman",serif;letter-spacing:2px;text-transform:uppercase;margin:12px 0 5px}
+.rapor table{table-layout:auto}
+.rapor th,.rapor td{padding:3px 6px;font-size:12px}
+.rapor tr{page-break-inside:avoid}
+.rapor tr.avg td{background:#ececec;font-weight:700}
+.rapor .note{font-size:10.5px;margin-top:4px;color:#333;font-family:system-ui,sans-serif}
+.pdfmode .paper.rapor{zoom:1;box-shadow:none;margin:0}
+.rapor~.rapor{page-break-before:always}
 #print{display:none}
-#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#000c;color:#fff;padding:9px 16px;border-radius:20px;z-index:20;display:none;font-size:14px}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#000d;color:#fff;padding:9px 16px;border-radius:4px;z-index:20;display:none;font-size:14px}
 .empty{text-align:center;color:var(--mu);padding:24px}
-@media print{@page{size:A4;margin:12mm}body{background:#fff;padding:0}header,#stat,main,nav,#toast{display:none!important}#print{display:block}#print .paper{border:0;padding:0;overflow:visible}.paper table td,.paper table th{font-size:11px}#print .rapor{min-width:0}}
+@media print{@page{size:A4;margin:10mm}@page land{size:A4 landscape;margin:8mm}body{background:#fff;padding:0}header,#stat,main,nav,#toast{display:none!important}#print{display:block}#print .paper{border:0;padding:0;overflow:visible;box-shadow:none}#print .paper.rapor{width:auto;zoom:1;margin:0}#print .paper.land{page:land}.paper:not(.rapor) table td,.paper:not(.rapor) table th{font-size:11px}}
 </style>
 </head>
 <body>
@@ -119,27 +122,43 @@ function del(id){const r=DB.recs[id];if(!r)return;r.deleted=true;r.updated_at=ne
 function q(id){if(!DB.queue.includes(id))DB.queue.push(id);save();clearTimeout(ft);ft=setTimeout(flush,400)}
 const all=(kind,f)=>Object.values(DB.recs).filter(r=>r.kind===kind&&!r.deleted&&(!f||f(r.data))).map(r=>Object.assign({},r.data,{id:r.id}));
 const newer=(a,b)=>new Date(a)>new Date(b);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const withTimeout=(p,ms,label)=>Promise.race([Promise.resolve(p),new Promise((_,rej)=>setTimeout(()=>rej(new Error(label+' terlalu lama (lebih dari '+ms/1000+' detik). Periksa internet atau pengaturan Supabase.')),ms))]);
 async function flush(){
-  if(!sb||!user||flushing||!DB.queue.length)return;flushing=true;
+  if(!sb||!user||flushing||!DB.queue.length)return;
+  flushing=true;let err=null;
   try{
-    const ids=[...DB.queue];
-    const rows=ids.map(id=>{const r=DB.recs[id];return{id,owner:user.id,kind:r.kind,data:r.data,deleted:r.deleted,updated_at:r.updated_at}});
-    const{error}=await sb.from('records').upsert(rows);if(error)throw error;
-    DB.queue=DB.queue.filter(i=>!ids.includes(i));save();setStatus('Tersinkron ✓ '+user.email);
-  }catch(e){setStatus('Sinkron tertunda: '+(e.message||e))}
-  flushing=false;if(DB.queue.length&&user)ft=setTimeout(flush,3000);
+    while(DB.queue.length){
+      const ids=DB.queue.slice(0,100);
+      const rows=ids.map(id=>{const r=DB.recs[id];return{id,owner:user.id,kind:r.kind,data:r.data,deleted:r.deleted,updated_at:r.updated_at}});
+      const{error}=await withTimeout(sb.from('records').upsert(rows),20000,'Mengirim data');
+      if(error)throw error;
+      DB.queue=DB.queue.filter(i=>!ids.includes(i));save();
+    }
+  }catch(e){err=e}
+  flushing=false;
+  if(err){setStatus('Sinkron tertunda: '+(err.message||err));clearTimeout(ft);ft=setTimeout(flush,8000)}
+  else setStatus('Tersinkron ✓ '+user.email+' · '+Object.keys(DB.recs).length+' data');
 }
 function mergeRow(r){const l=DB.recs[r.id];if(l&&!newer(r.updated_at,l.updated_at))return false;DB.recs[r.id]={id:r.id,kind:r.kind,data:r.data,deleted:r.deleted,updated_at:r.updated_at};return true}
-async function pull(){const{data,error}=await sb.from('records').select('*').eq('owner',user.id);if(error)throw error;data.forEach(mergeRow);save()}
 async function startSync(){
   try{
-    setStatus('Menyinkronkan…');
+    setStatus('Mengunduh data…');
     if(!DB.pushed){Object.keys(DB.recs).forEach(id=>{if(!DB.queue.includes(id))DB.queue.push(id)});DB.pushed=true}
-    await pull();await flush();render();
-    if(chan)sb.removeChannel(chan);
-    chan=sb.channel('rec-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'records',filter:'owner=eq.'+user.id},p=>{
-      const r=p.new;if(r&&r.id&&mergeRow(r)){save();if(!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))render()}
-    }).subscribe();
+    const{data,error}=await withTimeout(sb.from('records').select('*').eq('owner',user.id),25000,'Mengunduh data');
+    if(error)throw error;
+    data.forEach(mergeRow);save();render();
+    setStatus('Mengirim data…');
+    while(flushing)await sleep(200);
+    await flush();
+    if(!DB.queue.length&&!flushing)setStatus('Tersinkron ✓ '+user.email+' · '+Object.keys(DB.recs).length+' data');
+    render();
+    try{
+      if(chan)sb.removeChannel(chan);
+      chan=sb.channel('rec-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'records',filter:'owner=eq.'+user.id},p=>{
+        const r=p.new;if(r&&r.id&&mergeRow(r)){save();if(!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))render()}
+      }).subscribe();
+    }catch(e){}
   }catch(e){setStatus('Gagal sinkron: '+(e.message||e))}
 }
 async function connect(){
@@ -147,7 +166,7 @@ async function connect(){
   const ok=await loadLib(()=>!!window.supabase,'vendor/supabase.min.js','https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js');
   if(!ok){setStatus('Mode offline (pustaka Supabase belum termuat)');return}
   try{
-    sb=supabase.createClient(CFG.url,CFG.key);
+    sb=supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,lock:async(n,t,f)=>await f()}});
     const{data}=await sb.auth.getSession();user=data.session?data.session.user:null;
     if(user)await startSync();else setStatus('Mode offline – belum masuk akun');
   }catch(e){setStatus('Konfigurasi Supabase salah: '+e.message)}
@@ -155,12 +174,13 @@ async function connect(){
 window.addEventListener('online',()=>{if(user)startSync()});
 
 /* ===== Berkas: simpan/bagikan ===== */
-let _fs=null,_sh=null;
 async function shareFile(name,b64,mime){
   if(isNative()){
-    _fs=_fs||Capacitor.registerPlugin('Filesystem');_sh=_sh||Capacitor.registerPlugin('Share');
-    const r=await _fs.writeFile({path:name,data:b64,directory:'CACHE'});
-    await _sh.share({title:name,url:r.uri,dialogTitle:'Simpan atau bagikan'});
+    const P=(window.Capacitor&&Capacitor.Plugins)||{};
+    const FS=P.Filesystem,SH=P.Share;
+    if(!FS||!SH)throw new Error('Plugin simpan/bagikan tidak ditemukan di APK ini. Bangun ulang APK dari kode terbaru.');
+    const r=await FS.writeFile({path:name,data:b64,directory:'CACHE'});
+    await SH.share({title:name,url:r.uri,dialogTitle:'Simpan atau bagikan'});
   }else{
     const bin=atob(b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
     const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([u],{type:mime}));a.download=name;a.click();
@@ -215,7 +235,10 @@ function render(){
   $('#main').innerHTML=(tab!=='set'&&tab!=='home'&&!DB.cls)?noClass():v();
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
   if(tab==='absen')updCount();if(tab==='imtihan')updIm();
+  fitPaper();
 }
+function fitPaper(){const m=$('#main');if(!m||!m.clientWidth)return;document.documentElement.style.setProperty('--z',Math.min(1,(m.clientWidth-26)/718).toFixed(3))}
+window.addEventListener('resize',fitPaper);
 const noClass=()=>`<div class="card empty">Belum ada kelas.<br><br><button class="b" onclick="newKelas()">Buat kelas pertama</button></div>`;
 function newKelas(){const n=prompt('Nama kelas (contoh: 3-R Tsanawiyah)');if(n&&n.trim()){DB.cls=put('kelas',{nama:n.trim()});save();tab='kelas';render()}}
 function ren(id,label){const r=DB.recs[id];const n=prompt(label,r.data.nama);if(n&&n.trim()){put(r.kind,Object.assign({},r.data,{nama:n.trim()}),id);render()}}
@@ -393,8 +416,9 @@ async function cetak(){
     toast('Menyiapkan PDF…');
     const ok=await loadLib(()=>!!window.html2pdf,'vendor/html2pdf.bundle.min.js','https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js');
     if(!ok)return alert('Pustaka PDF belum termuat. Pastikan APK dibangun dengan langkah "npm run build".');
-    const box=document.createElement('div');box.style.cssText='position:fixed;left:0;top:0;width:'+(rp.sec==='rapor'?794:1100)+'px;background:#fff;z-index:-1';box.innerHTML=h;document.body.appendChild(box);
-    const opt={margin:8,image:{type:'jpeg',quality:.95},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:rp.sec==='rapor'?'portrait':'landscape'},pagebreak:{mode:['css','avoid-all']}};
+    const land=rp.sec==='nilai',W=land?1047:718;
+    const box=document.createElement('div');box.className='pdfmode';box.style.cssText='position:fixed;left:0;top:0;width:'+W+'px;background:#fff;z-index:-1';box.innerHTML=h;document.body.appendChild(box);
+    const opt={margin:10,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,windowWidth:W},jsPDF:{unit:'mm',format:'a4',orientation:land?'landscape':'portrait'},pagebreak:{mode:['css'],avoid:['tr','.ttd']}};
     const uri=await html2pdf().set(opt).from(box).outputPdf('datauristring');document.body.removeChild(box);
     await shareFile('laporan-'+rp.sec+'-'+today()+'.pdf',uri.split(',')[1],'application/pdf');
   }catch(e){alert('Gagal membuat PDF: '+(e.message||e))}
@@ -404,7 +428,7 @@ function rekapHadir(C){
   const m=rp.bulan,bl=blocks(C,DB.set.ord,scopePred()),flat=bl.length&&bl[0].flat;
   const sesi=C.abs.filter(a=>!m||a.tanggal.startsWith(m)).length,nc=flat?8:7;let allst=[];
   const rows=bl.map(x=>{const st=x.stu.map(s=>({s,t:stat(s.id,C,m)}));allst=allst.concat(st);
-    return (flat?'':`<tr><th colspan="${nc}">Kelompok ${esc(x.g.nama)}</th></tr>`)+st.map(z=>`<tr><td class="c">${z.s.no||''}</td><td>${esc(z.s.nama)}</td>${flat?`<td>${esc(grpName(C,z.s))}</td>`:''}<td class="c">${z.t.c.H}</td><td class="c">${z.t.c.S}</td><td class="c">${z.t.c.I}</td><td class="c">${z.t.c.A}</td><td class="c">${pct(z.t.hp)}</td></tr>`).join('')+(flat||rp.scope==='santri'?'':`<tr><td colspan="${nc-1}"><b>Rata-rata kelompok ${esc(x.g.nama)}</b></td><td class="c"><b>${pct(mean(st.map(z=>z.t.hp)))}</b></td></tr>`)}).join('');
+    return (flat?'':`<tr class="gr"><th colspan="${nc}">Kelompok ${esc(x.g.nama)}</th></tr>`)+st.map(z=>`<tr><td class="c">${z.s.no||''}</td><td>${esc(z.s.nama)}</td>${flat?`<td>${esc(grpName(C,z.s))}</td>`:''}<td class="c">${z.t.c.H}</td><td class="c">${z.t.c.S}</td><td class="c">${z.t.c.I}</td><td class="c">${z.t.c.A}</td><td class="c">${pct(z.t.hp)}</td></tr>`).join('')+(flat||rp.scope==='santri'?'':`<tr><td colspan="${nc-1}"><b>Rata-rata kelompok ${esc(x.g.nama)}</b></td><td class="c"><b>${pct(mean(st.map(z=>z.t.hp)))}</b></td></tr>`)}).join('');
   const fin=rp.scope==='santri'?'':(bl.length>1||flat)?`<tr><td colspan="${nc-1}"><b>Rata-rata ${rp.scope==='kelompok'?'kelompok':'kelas'}</b></td><td class="c"><b>${pct(mean(allst.map(z=>z.t.hp)))}</b></td></tr>`:'';
   return `<div class="paper"><h2>REKAP KEHADIRAN SANTRI</h2><div class="sub">${esc(scopeTitle(C))} · ${esc(periode())} · ${sesi} sesi absensi</div>
   <div class="sc"><table><tr><th class="c">No</th><th>Nama</th>${flat?'<th>Kelompok</th>':''}<th class="c">H</th><th class="c">S</th><th class="c">I</th><th class="c">A</th><th class="c">% Hadir</th></tr>${rows}${fin}</table></div>
@@ -415,10 +439,10 @@ function rekapNilai(C){
   const bl=blocks(C,DB.set.ord,scopePred()),flat=bl.length&&bl[0].flat,rk=rankNilai(C),nc=2+(flat?1:0)+C.kit.length+4;let allst=[];
   const head=`<tr><th class="c">No</th><th>Nama</th>${flat?'<th>Kelompok</th>':''}${C.kit.map(k=>`<th class="c">${esc(k.nama)}${k.pokok?' ★':''}<br><small>${esc(k.fan)}</small></th>`).join('')}<th class="c">Rata-rata<br>Fan Pokok</th><th class="c">Rata-rata<br>Fan Seluruh</th><th class="c">Khatam</th><th class="c">Peringkat</th></tr>`;
   const rows=bl.map(x=>{allst=allst.concat(x.stu);
-    return (flat?'':`<tr><th colspan="${nc}">Kelompok ${esc(x.g.nama)}</th></tr>`)+x.stu.map(s=>{const st=stat(s.id,C);return `<tr><td class="c">${s.no||''}</td><td>${esc(s.nama)}</td>${flat?`<td>${esc(grpName(C,s))}</td>`:''}${C.kit.map(k=>{const n=getNil(C,k.id,s.id);return`<td class="c">${n&&validN(n,C)?fmt(+n.nilai):'–'}${n&&n.khatam?' ✓':''}</td>`}).join('')}<td class="c"><b>${fmt(st.avP)}</b></td><td class="c"><b>${fmt(st.av)}</b></td><td class="c">${st.kh}</td><td class="c">${rk[s.id]||'–'}</td></tr>`}).join('')
+    return (flat?'':`<tr class="gr"><th colspan="${nc}">Kelompok ${esc(x.g.nama)}</th></tr>`)+x.stu.map(s=>{const st=stat(s.id,C);return `<tr><td class="c">${s.no||''}</td><td>${esc(s.nama)}</td>${flat?`<td>${esc(grpName(C,s))}</td>`:''}${C.kit.map(k=>{const n=getNil(C,k.id,s.id);return`<td class="c">${n&&validN(n,C)?fmt(+n.nilai):'–'}${n&&n.khatam?' ✓':''}</td>`}).join('')}<td class="c"><b>${fmt(st.avP)}</b></td><td class="c"><b>${fmt(st.av)}</b></td><td class="c">${st.kh}</td><td class="c">${rk[s.id]||'–'}</td></tr>`}).join('')
     +(flat||rp.scope==='santri'?'':(g=>`<tr><td colspan="${nc-4}"><b>Rata-rata kelompok ${esc(x.g.nama)}</b> <small>(${g.nn} dari ${g.n} santri bernilai)</small></td><td class="c"><b>${fmt(g.avP)}</b></td><td class="c"><b>${fmt(g.av)}</b></td><td class="c">${g.kh}</td><td></td></tr>`)(grpStat(x.stu,C)))}).join('');
   const fin=rp.scope==='santri'?'':(bl.length>1||flat)?(g=>`<tr><td colspan="${nc-4}"><b>Rata-rata ${rp.scope==='kelompok'?'kelompok':'kelas'}</b> <small>(${g.nn} dari ${g.n} santri bernilai)</small></td><td class="c"><b>${fmt(g.avP)}</b></td><td class="c"><b>${fmt(g.av)}</b></td><td class="c">${g.kh}</td><td></td></tr>`)(grpStat(allst,C)):'';
-  return `<div class="paper"><h2>REKAP NILAI &amp; KHATAM</h2><div class="sub">${esc(scopeTitle(C))}</div><div class="sc"><table>${head}${rows}${fin}</table></div>
+  return `<div class="paper land"><h2>REKAP NILAI &amp; KHATAM</h2><div class="sub">${esc(scopeTitle(C))}</div><div class="sc"><table>${head}${rows}${fin}</table></div>
   <div style="font-size:12px;margin-top:6px">★ = fan pokok. ✓ = khatam (hanya informasi, tidak memengaruhi nilai). Nilai kosong tidak dihitung nol. Peringkat berdasarkan rata-rata fan seluruh se-kelas.</div>${ttdHTML()}</div>`;
 }
 function raporAll(C){
@@ -434,17 +458,15 @@ function rapor(s,C){
   const kg=C.keg.filter(k=>k.rapor!==false).map(k=>{const c={H:0,S:0,I:0,A:0};C.abs.filter(a=>a.kegiatanId===k.id&&(!rp.bulan||a.tanggal.startsWith(rp.bulan))).forEach(a=>{const v=a.status[s.id];if(v)c[v]++});return`<tr><td>${esc(k.nama)}</td><td class="c">${c.H}</td><td class="c">${c.S}</td><td class="c">${c.I}</td><td class="c">${c.A}</td></tr>`}).join('');
   return `<section class="paper rapor"><div class="ijz"><div class="ijz-in">
   <div class="ijz-bsm">بسم الله الرحمن الرحيم</div>
-  <div class="ijz-ttl">LAPORAN HASIL BELAJAR<br>${showH?'&amp; KEHADIRAN SANTRI':'SANTRI'}</div>
-  <div class="ijz-orn">❖ ❖ ❖</div>
-  <div class="ijz-sub">Diberikan kepada</div>
-  <div class="ijz-nama">${esc(s.nama)}</div>
-  <div class="ijz-info">Kelompok ${esc(g?g.nama:'-')} &nbsp;·&nbsp; Kelas ${esc(kelasNama())}${showH&&rp.bulan?' &nbsp;·&nbsp; '+esc(periode()):''}</div>
-  <h3>A. NILAI UJIAN DAN KHATAM KITAB</h3>
-  <table><tr><th class="c" style="width:34px">No</th><th>Fan</th><th>Kitab</th><th class="c" style="width:60px">Nilai</th><th class="c" style="width:76px">Khatam</th></tr>${kit||'<tr><td colspan="5" class="c">Belum ada kitab</td></tr>'}
+  <div class="ijz-ttl">LAPORAN HASIL BELAJAR<span>${showH?'&amp; KEHADIRAN SANTRI':'SANTRI'}</span></div>
+  <div class="ijz-rule"><i></i>◆<i></i></div>
+  <table class="ijz-id"><tr><td style="width:78px">Nama</td><td>: <b style="font-size:15px">${esc(s.nama)}</b></td></tr><tr><td>Kelompok</td><td>: ${esc(g?g.nama:'-')}</td></tr><tr><td>Kelas</td><td>: ${esc(kelasNama())}</td></tr></table>
+  <h3>A. Nilai Ujian dan Khatam Kitab</h3>
+  <table><tr><th class="c" style="width:32px">No</th><th style="width:22%">Fan</th><th>Kitab</th><th class="c" style="width:58px">Nilai</th><th class="c" style="width:70px">Khatam</th></tr>${kit||'<tr><td colspan="5" class="c">Belum ada kitab</td></tr>'}
   <tr class="avg"><td colspan="3">Rata-rata Fan Pokok ★ <span style="font-weight:400">(${st.np} kitab)</span></td><td class="c">${fmt(st.avP)}</td><td></td></tr>
   <tr class="avg"><td colspan="3">Rata-rata Fan Seluruh <span style="font-weight:400">(${st.nn} kitab)</span></td><td class="c">${fmt(st.av)}</td><td></td></tr></table>
-  <div class="note">★ Fan pokok. Jumlah kitab khatam: <b>${st.kh}</b> dari ${C.kit.length} kitab (keterangan khatam tidak memengaruhi nilai).</div>
-  ${showH?`<h3>B. KEHADIRAN KEGIATAN</h3><table><tr><th>Kegiatan</th><th class="c">Hadir</th><th class="c">Sakit</th><th class="c">Izin</th><th class="c">Alpa</th></tr>${kg}<tr class="avg"><td>Jumlah</td><td class="c">${st.c.H}</td><td class="c">${st.c.S}</td><td class="c">${st.c.I}</td><td class="c">${st.c.A}</td></tr></table>`:''}
+  <div class="note">★ Fan pokok. Kitab khatam: <b>${st.kh}</b> dari ${C.kit.length} kitab (keterangan khatam tidak memengaruhi nilai).</div>
+  ${showH?`<h3>B. Kehadiran Kegiatan${rp.bulan?' — '+esc(periode()):''}</h3><table><tr><th>Kegiatan</th><th class="c" style="width:62px">Hadir</th><th class="c" style="width:62px">Sakit</th><th class="c" style="width:62px">Izin</th><th class="c" style="width:62px">Alpa</th></tr>${kg}<tr class="avg"><td>Jumlah</td><td class="c">${st.c.H}</td><td class="c">${st.c.S}</td><td class="c">${st.c.I}</td><td class="c">${st.c.A}</td></tr></table>`:''}
   ${ttdHTML()}
   </div></div></section>`;
 }
@@ -454,7 +476,7 @@ function pengaturan(){
   return `<div class="card"><h2>Akun &amp; sinkron Supabase</h2><div id="sbmsg" style="margin-bottom:6px;color:var(--mu)">${user?'Masuk sebagai '+esc(user.email):'Belum masuk. Aplikasi tetap berjalan offline.'}</div>
   <input id="cu" placeholder="Project URL (https://xxxx.supabase.co)" value="${esc(CFG.url||'')}" style="margin-bottom:6px"><input id="ck" placeholder="Anon / publishable key" value="${esc(CFG.key||'')}" style="margin-bottom:6px">
   <button class="b o" onclick="saveCfg()">Simpan koneksi</button>
-  ${user?`<div style="margin-top:8px"><button class="b" onclick="startSync()">Sinkron sekarang</button> <button class="b d" onclick="logout()">Keluar</button></div>`:`<h3>Masuk</h3><input id="em" type="email" placeholder="Email" style="margin-bottom:6px"><input id="pw" type="password" placeholder="Kata sandi (min. 6 karakter)" style="margin-bottom:6px"><button class="b" onclick="login()">Masuk</button> <button class="b o" onclick="signup()">Daftar akun baru</button>`}</div>
+  ${user?`<div style="margin-top:8px"><button class="b" onclick="startSync()">Sinkron sekarang</button> <button class="b o" onclick="tes()">Tes koneksi</button> <button class="b d" onclick="logout()">Keluar</button></div>`:`<h3>Masuk</h3><input id="em" type="email" placeholder="Email" style="margin-bottom:6px"><input id="pw" type="password" placeholder="Kata sandi (min. 6 karakter)" style="margin-bottom:6px"><button class="b" onclick="login()">Masuk</button> <button class="b o" onclick="signup()">Daftar akun baru</button>`}</div>
   <div class="card"><h2>Rapor &amp; nilai</h2><label class="l">Nilai maksimum</label><input id="smx" type="number" value="${DB.set.max}"><label class="l">Tanda tangan kiri (wali kelas)</label><input id="st1" value="${esc(DB.set.ttd1)}"><label class="l">Tanda tangan kanan (pimpinan)</label><input id="st2" value="${esc(DB.set.ttd2)}"><label class="l">Tempat penerbitan (opsional, mis. Kediri)</label><input id="stp" value="${esc(DB.set.tempat)}"><div style="margin-top:8px"><button class="b" onclick="saveSet()">Simpan</button></div></div>
   <div class="card"><h2>Cadangan data</h2><div class="f"><button class="b o" onclick="backup()">Unduh cadangan (JSON)</button><label class="b o" style="text-align:center;cursor:pointer">Pulihkan<input type="file" accept=".json,application/json" hidden onchange="restore(this.files[0])"></label></div>
   <button class="b d s" onclick="wipe()">Hapus data di perangkat ini</button></div>
@@ -465,8 +487,9 @@ function sbMsg(t){const e=$('#sbmsg');if(e)e.textContent=t}
 async function login(){if(!sb)return sbMsg('Simpan Project URL dan key dulu.');const{data,error}=await sb.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#pw').value});if(error)return sbMsg('Gagal masuk: '+error.message);user=data.user;await startSync();render()}
 async function signup(){if(!sb)return sbMsg('Simpan Project URL dan key dulu.');const{data,error}=await sb.auth.signUp({email:$('#em').value.trim(),password:$('#pw').value});if(error)return sbMsg('Gagal daftar: '+error.message);if(data.session){user=data.user;await startSync();render()}else sbMsg('Akun dibuat. Cek email untuk konfirmasi (atau nonaktifkan konfirmasi email di Supabase), lalu tekan Masuk.')}
 async function logout(){await sb.auth.signOut();user=null;if(chan){sb.removeChannel(chan);chan=null}setStatus('Mode offline – belum masuk akun');render()}
+async function tes(){sbMsg('Menguji koneksi…');try{const t0=Date.now();const{count,error}=await withTimeout(sb.from('records').select('id',{count:'exact',head:true}),15000,'Tes koneksi');if(error)throw error;sbMsg('Koneksi OK ('+(Date.now()-t0)+' ms). Data di server: '+count+' · data di perangkat: '+Object.keys(DB.recs).length+' · menunggu kirim: '+DB.queue.length)}catch(e){sbMsg('Gagal: '+(e.message||e))}}
 function saveSet(){Object.assign(DB.set,{max:+$('#smx').value||100,ttd1:$('#st1').value.trim()||DEF.ttd1,ttd2:$('#st2').value.trim()||DEF.ttd2,tempat:$('#stp').value.trim()});save();toast('Tersimpan')}
-async function backup(){const t=JSON.stringify({recs:DB.recs,set:DB.set});await shareFile('maktab-cadangan-'+today()+'.json',btoa(unescape(encodeURIComponent(t))),'application/json')}
+async function backup(){try{const t=JSON.stringify({recs:DB.recs,set:DB.set});await shareFile('maktab-cadangan-'+today()+'.json',btoa(unescape(encodeURIComponent(t))),'application/json')}catch(e){alert('Gagal membuat cadangan: '+(e.message||e))}}
 function restore(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);Object.values(d.recs||{}).forEach(x=>{DB.recs[x.id]=x;if(!DB.queue.includes(x.id))DB.queue.push(x.id)});if(d.set)DB.set=Object.assign({},DB.set,d.set);save();flush();toast('Data dipulihkan');render()}catch(e){alert('Berkas cadangan tidak valid')}};r.readAsText(f)}
 function wipe(){if(confirm('Hapus semua data di perangkat ini? Data di Supabase tidak ikut terhapus.')&&confirm('Yakin?')){DB={recs:{},queue:[],cls:null,pushed:false,set:DB.set};save();render()}}
 
