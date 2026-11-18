@@ -436,21 +436,83 @@ function cetak(){
   if(isNative())return unduh();
   const r=siapkanLaporan();$('#print').innerHTML=r.html;setTimeout(()=>window.print(),150);
 }
+/* ===== Pembuat PDF A4 bawaan (tanpa pustaka luar): HTML -> gambar halaman -> PDF ===== */
+function bagiHalaman(html,W,H){
+  const m=document.createElement('div');m.className='pdfmode';m.style.cssText='position:absolute;left:-99999px;top:0;width:'+W+'px;background:#fff';
+  m.innerHTML=html;document.body.appendChild(m);
+  const pages=[];
+  [...m.children].forEach(pap=>{
+    const sc=pap.querySelector('.sc'),tb=sc&&sc.querySelector('tbody');
+    if(pap.classList.contains('rapor')||!tb||!tb.children.length){pages.push(pap.outerHTML);return}
+    const rows=[...tb.children],rh=rows.map(r=>r.getBoundingClientRect().height);
+    const pr=pap.getBoundingClientRect(),sr=sc.getBoundingClientRect();
+    const th=sc.querySelector('thead').getBoundingClientRect().height,scTop=sr.top-pr.top,foot=pr.height-(scTop+sr.height);
+    const ranges=[];let i=0,first=true,remain=0;
+    while(i<rows.length){const cap=(first?H-scTop-th:H-th)-8;let h=0,j=i;while(j<rows.length&&(h+rh[j]<=cap||j===i)){h+=rh[j];j++}ranges.push([i,j,first]);remain=cap-h;i=j;first=false}
+    const fits=foot<=remain;
+    const mk=(from,to,isFirst,isLast,onlyFoot)=>{
+      const c=pap.cloneNode(true);
+      [...c.querySelector('tbody').children].forEach((r,k)=>{if(k<from||k>=to)r.remove()});
+      if(!isFirst){const h2=c.querySelector('h2'),sb=c.querySelector('.sub');if(h2)h2.remove();if(sb)sb.remove()}
+      if(!isLast){const s2=c.querySelector('.sc');let n=s2.nextSibling;while(n){const x=n.nextSibling;n.remove();n=x}}
+      if(onlyFoot)c.querySelector('.sc').remove();
+      return c.outerHTML};
+    ranges.forEach((rg,k)=>pages.push(mk(rg[0],rg[1],rg[2],k===ranges.length-1&&fits,false)));
+    if(!fits)pages.push(mk(0,0,false,true,true));
+  });
+  document.body.removeChild(m);return pages;
+}
+function cssLengkap(){let t='';for(const sh of document.styleSheets){try{for(const r of sh.cssRules)t+=r.cssText+'\n'}catch(e){}}return t}
+async function halamanKeJpeg(pageHtml,W,H,skala,css){
+  const host=document.createElement('div');host.className='pdfmode';
+  host.style.cssText='width:'+W+'px;height:'+H+'px;background:#fff;overflow:hidden;color:#000;font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
+  const st=document.createElement('style');st.textContent=css;host.appendChild(st);
+  host.insertAdjacentHTML('beforeend',pageHtml);
+  const xml=new XMLSerializer().serializeToString(host);
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'"><foreignObject x="0" y="0" width="'+W+'" height="'+H+'">'+xml+'</foreignObject></svg>';
+  const img=new Image();
+  await new Promise((ok,no)=>{img.onload=ok;img.onerror=()=>no(new Error('gagal merender halaman'));img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)});
+  const cv=document.createElement('canvas');cv.width=Math.round(W*skala);cv.height=Math.round(H*skala);
+  const g=cv.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,cv.width,cv.height);g.drawImage(img,0,0,cv.width,cv.height);
+  const b64=cv.toDataURL('image/jpeg',.93).split(',')[1];
+  return{bytes:Uint8Array.from(atob(b64),c=>c.charCodeAt(0)),w:cv.width,h:cv.height};
+}
+function pdfDari(imgs,land){
+  const enc=new TextEncoder(),parts=[],offs=[];let len=0;
+  const put=x=>{const u=typeof x==='string'?enc.encode(x):x;parts.push(u);len+=u.length};
+  const PW=land?841.89:595.28,PH=land?595.28:841.89,mg=28.35,cw=(PW-2*mg).toFixed(2),ch=(PH-2*mg).toFixed(2),n=imgs.length;
+  put('%PDF-1.4\n');
+  offs[1]=len;put('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  offs[2]=len;put('2 0 obj\n<< /Type /Pages /Kids ['+imgs.map((_,i)=>(3+3*i)+' 0 R').join(' ')+'] /Count '+n+' >>\nendobj\n');
+  imgs.forEach((im,i)=>{
+    const pg=3+3*i,ct=4+3*i,ig=5+3*i,cmd='q '+cw+' 0 0 '+ch+' '+mg+' '+mg+' cm /Im0 Do Q';
+    offs[pg]=len;put(pg+' 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+PW+' '+PH+'] /Resources << /XObject << /Im0 '+ig+' 0 R >> >> /Contents '+ct+' 0 R >>\nendobj\n');
+    offs[ct]=len;put(ct+' 0 obj\n<< /Length '+cmd.length+' >>\nstream\n'+cmd+'\nendstream\nendobj\n');
+    offs[ig]=len;put(ig+' 0 obj\n<< /Type /XObject /Subtype /Image /Width '+im.w+' /Height '+im.h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+im.bytes.length+' >>\nstream\n');put(im.bytes);put('\nendstream\nendobj\n');
+  });
+  const total=2+3*n,xr=len;
+  put('xref\n0 '+(total+1)+'\n0000000000 65535 f \n');
+  for(let k=1;k<=total;k++)put(String(offs[k]).padStart(10,'0')+' 00000 n \n');
+  put('trailer\n<< /Size '+(total+1)+' /Root 1 0 R >>\nstartxref\n'+xr+'\n%%EOF');
+  const out=new Uint8Array(len);let o=0;parts.forEach(u=>{out.set(u,o);o+=u.length});return out;
+}
+function bytesKeB64(u){let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)}
+async function buatPdfLaporan(only,progres){
+  const r=siapkanLaporan(only),W=r.W,H=r.land?718:1047;
+  const pages=bagiHalaman(r.html,W,H),css=cssLengkap(),imgs=[];
+  for(let i=0;i<pages.length;i++){if(progres)progres(i+1,pages.length);imgs.push(await halamanKeJpeg(pages[i],W,H,2.5,css))}
+  return{bytes:pdfDari(imgs,r.land),halaman:pages.length};
+}
 async function unduh(only){
   if(typeof only!=='string')only=null;
   if(!$('#rep').innerHTML.trim())return;
   try{
     toast('Menyiapkan PDF…');
-    const ok=await loadLib(()=>!!window.html2pdf,'vendor/html2pdf.bundle.min.js','https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js');
-    if(!ok)return alert(isNative()?'Pustaka PDF tidak ditemukan di APK. Bangun ulang APK (npm run build).':'Pustaka PDF gagal dimuat. Periksa internet, atau gunakan tombol Cetak lalu pilih "Simpan sebagai PDF".');
-    const r=siapkanLaporan(only);
-    const box=document.createElement('div');box.className='pdfmode';box.style.cssText='position:fixed;left:0;top:0;width:'+r.W+'px;background:#fff;z-index:-1';box.innerHTML=r.html;document.body.appendChild(box);
-    const opt={margin:10,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,windowWidth:r.W},jsPDF:{unit:'mm',format:'a4',orientation:r.land?'landscape':'portrait'},pagebreak:{mode:['css'],avoid:['tr','.ttd']}};
-    let uri;try{uri=await html2pdf().set(opt).from(box).outputPdf('datauristring')}finally{document.body.removeChild(box)}
+    const res=await buatPdfLaporan(only,(i,n)=>toast('Menyiapkan PDF… halaman '+i+' dari '+n));
     let nm={nilai:'rekap-nilai',hadir:'rekap-kehadiran',rapor:'rapor-santri'}[rp.sec];
     if(only){const sx=ctx().stu.find(x=>x.id===only);if(sx)nm='rapor-'+sx.nama.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
-    await shareFile(nm+'-'+today()+'.pdf',uri.split(',')[1],'application/pdf');
-    toast('PDF siap');
+    await shareFile(nm+'-'+today()+'.pdf',bytesKeB64(res.bytes),'application/pdf');
+    toast('PDF siap ('+res.halaman+' halaman)');
   }catch(e){alert('Gagal membuat PDF: '+(e.message||e))}
 }
 function rekapHadir(C){
@@ -512,10 +574,44 @@ function pengaturan(){
   <button class="b d s" onclick="wipe()">Hapus data di perangkat ini</button></div>
   <div class="card"><small style="color:var(--mu)">Maktab Class Manager v2 · data tersimpan lokal di perangkat dan disalin ke Supabase saat online dan sudah masuk akun.</small></div>`;
 }
-function saveCfg(){CFG={url:$('#cu').value.trim(),key:$('#ck').value.trim()};localStorage.setItem(CF,JSON.stringify(CFG));toast('Koneksi disimpan');connect().then(render)}
+const normUrl=u=>(u||'').trim().replace(/\/rest\/v1\/?.*$/,'').replace(/\/+$/,'');
+function saveCfg(){
+  const u=normUrl($('#cu').value),k=$('#ck').value.trim();
+  if(u&&!/^https:\/\/.+/i.test(u))return sbMsg('Project URL harus diawali https:// (contoh: https://xxxx.supabase.co)');
+  CFG={url:u,key:k};localStorage.setItem(CF,JSON.stringify(CFG));toast('Koneksi disimpan');connect().then(render)}
 function sbMsg(t){const e=$('#sbmsg');if(e)e.textContent=t}
-async function login(){if(!sb)return sbMsg('Simpan Project URL dan key dulu.');const{data,error}=await sb.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#pw').value});if(error)return sbMsg('Gagal masuk: '+error.message);user=data.user;await startSync();render()}
-async function signup(){if(!sb)return sbMsg('Simpan Project URL dan key dulu.');const{data,error}=await sb.auth.signUp({email:$('#em').value.trim(),password:$('#pw').value});if(error)return sbMsg('Gagal daftar: '+error.message);if(data.session){user=data.user;await startSync();render()}else sbMsg('Akun dibuat. Cek email untuk konfirmasi (atau nonaktifkan konfirmasi email di Supabase), lalu tekan Masuk.')}
+/* Dipakai oleh Masuk/Daftar: otomatis menyimpan URL & key yang sudah diketik, jadi tidak perlu menekan "Simpan koneksi" dulu */
+async function pastikanKoneksi(){
+  const u=normUrl($('#cu')?$('#cu').value:CFG.url),k=($('#ck')?$('#ck').value:CFG.key||'').trim();
+  if(!u||!k){sbMsg('Isi Project URL dan key Supabase dulu (kolom di atas).');return false}
+  if(!/^https:\/\/.+/i.test(u)){sbMsg('Project URL harus diawali https:// (contoh: https://xxxx.supabase.co)');return false}
+  if(u!==CFG.url||k!==CFG.key||!sb){CFG={url:u,key:k};localStorage.setItem(CF,JSON.stringify(CFG));sbMsg('Menghubungkan ke Supabase…');await connect()}
+  if(!sb){sbMsg('Gagal terhubung: pustaka Supabase belum termuat. Periksa internet lalu coba lagi.');return false}
+  return true}
+function galat(e){const m=(e&&e.message)||String(e);return /fetch|network|load failed/i.test(m)?'Tidak bisa menghubungi Supabase. Periksa internet dan Project URL. ('+m+')':m}
+async function login(){
+  if(!await pastikanKoneksi())return;
+  const em=$('#em').value.trim().toLowerCase(),pw=$('#pw').value;
+  if(!em||!pw)return sbMsg('Isi email dan kata sandi.');
+  sbMsg('Masuk…');
+  try{
+    const{data,error}=await withTimeout(sb.auth.signInWithPassword({email:em,password:pw}),20000,'Masuk');
+    if(error)return sbMsg('Gagal masuk: '+(/invalid login/i.test(error.message)?'email atau kata sandi salah, atau akun belum dikonfirmasi/dibuat (tekan "Daftar akun baru" jika belum punya akun).':error.message));
+    user=data.user;await startSync();render();
+  }catch(e){sbMsg('Gagal masuk: '+galat(e))}
+}
+async function signup(){
+  if(!await pastikanKoneksi())return;
+  const em=$('#em').value.trim().toLowerCase(),pw=$('#pw').value;
+  if(!em||pw.length<6)return sbMsg('Isi email dan kata sandi (minimal 6 karakter).');
+  sbMsg('Membuat akun…');
+  try{
+    const{data,error}=await withTimeout(sb.auth.signUp({email:em,password:pw}),20000,'Daftar');
+    if(error)return sbMsg('Gagal daftar: '+error.message);
+    if(data.session){user=data.user;await startSync();render()}
+    else sbMsg('Akun dibuat. Jika Supabase meminta konfirmasi email, cek email Anda (atau matikan "Confirm email" di Supabase), lalu tekan Masuk.');
+  }catch(e){sbMsg('Gagal daftar: '+galat(e))}
+}
 async function logout(){await sb.auth.signOut();user=null;if(chan){sb.removeChannel(chan);chan=null}setStatus('Mode offline – belum masuk akun');render()}
 async function tes(){sbMsg('Menguji koneksi…');try{const t0=Date.now();const{count,error}=await withTimeout(sb.from('records').select('id',{count:'exact',head:true}),15000,'Tes koneksi');if(error)throw error;sbMsg('Koneksi OK ('+(Date.now()-t0)+' ms). Data di server: '+count+' · data di perangkat: '+Object.keys(DB.recs).length+' · menunggu kirim: '+DB.queue.length)}catch(e){sbMsg('Gagal: '+(e.message||e))}}
 function saveSet(){Object.assign(DB.set,{max:+$('#smx').value||100,ttd1:$('#st1').value.trim()||DEF.ttd1,ttd2:$('#st2').value.trim()||DEF.ttd2,tempat:$('#stp').value.trim()});save();toast('Tersimpan')}
