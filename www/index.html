@@ -406,16 +406,21 @@ function laporan(){
   ${rp.scope!=='santri'?ordChips():''}
   ${rp.sec!=='nilai'&&DB.set.absensi?`<div class="f"><input type="month" value="${rp.bulan}" onchange="rp.bulan=this.value;render()" title="Kosongkan untuk semua bulan"></div>`:''}
   ${rp.sec==='rapor'&&DB.set.absensi?`<label class="chk" style="margin:6px 0"><input type="checkbox" ${rp.hadir?'checked':''} onchange="rp.hadir=this.checked;render()">Sertakan kehadiran kegiatan di rapor</label>`:''}
-  <label class="chk" style="margin:6px 0"><input type="checkbox" ${rp.warna?'checked':''} onchange="rp.warna=this.checked;render()">Rapor &amp; rekap berwarna (hijau-emas). Matikan untuk hitam-putih.</label>
+  <label class="chk" style="margin:6px 0;white-space:normal"><input type="checkbox" ${rp.warna?'checked':''} onchange="rp.warna=this.checked;render()">Rapor &amp; rekap berwarna (hijau-emas). Matikan untuk hitam-putih.</label>
   <small style="color:var(--mu)">Semua laporan otomatis disesuaikan ke kertas A4 dan memuat dua tanda tangan.${isNative()?' Di aplikasi, kedua tombol menghasilkan berkas PDF yang bisa disimpan atau dibagikan.':''}</small>
-  <div class="f" style="margin-top:8px"><button class="b" onclick="cetak()">⎙ Cetak</button><button class="b o" onclick="unduh()">⇩ Unduh PDF</button></div></div>
-  <div id="rep">${body}</div>`;
+  ${aksi()}</div>
+  <div id="rep">${body}</div>
+  <div class="card">${aksi()}</div>`;
 }
+const LBL={nilai:'Unduh Rekap Nilai',hadir:'Unduh Rekap Kehadiran',rapor:'Unduh Rapor'};
+const aksi=()=>`<div class="f" style="margin-top:8px;flex-wrap:wrap"><button class="b" onclick="cetak()">⎙ Cetak / Simpan PDF</button><button class="b o" onclick="unduh()">⇩ ${LBL[rp.sec]} (PDF A4)</button></div>`;
 /* Menyiapkan isi laporan agar pas A4: tabel lebar dan rapor panjang diperkecil otomatis */
-function siapkanLaporan(){
+function siapkanLaporan(only){
   const land=rp.sec==='nilai',W=land?1047:718,H=1020;
   const m=document.createElement('div');m.className='pdfmode';m.style.cssText='position:absolute;left:-99999px;top:0;width:'+W+'px;background:#fff';
   m.innerHTML=$('#rep').innerHTML;document.body.appendChild(m);
+  m.querySelectorAll('.nop').forEach(e=>e.remove());
+  if(only)m.querySelectorAll('.paper.rapor').forEach(r=>{if(r.dataset.sid!==only)r.remove()});
   m.querySelectorAll('.paper:not(.rapor) .sc').forEach(sc=>{
     let k=1;sc.style.setProperty('--k',1);
     for(let i=0;i<4&&sc.scrollWidth>sc.clientWidth+1;i++){k=Math.max(.4,k*(sc.clientWidth/sc.scrollWidth)*.97);sc.style.setProperty('--k',k.toFixed(3))}
@@ -431,17 +436,19 @@ function cetak(){
   if(isNative())return unduh();
   const r=siapkanLaporan();$('#print').innerHTML=r.html;setTimeout(()=>window.print(),150);
 }
-async function unduh(){
+async function unduh(only){
+  if(typeof only!=='string')only=null;
   if(!$('#rep').innerHTML.trim())return;
   try{
     toast('Menyiapkan PDF…');
     const ok=await loadLib(()=>!!window.html2pdf,'vendor/html2pdf.bundle.min.js','https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js');
     if(!ok)return alert(isNative()?'Pustaka PDF tidak ditemukan di APK. Bangun ulang APK (npm run build).':'Pustaka PDF gagal dimuat. Periksa internet, atau gunakan tombol Cetak lalu pilih "Simpan sebagai PDF".');
-    const r=siapkanLaporan();
+    const r=siapkanLaporan(only);
     const box=document.createElement('div');box.className='pdfmode';box.style.cssText='position:fixed;left:0;top:0;width:'+r.W+'px;background:#fff;z-index:-1';box.innerHTML=r.html;document.body.appendChild(box);
     const opt={margin:10,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,windowWidth:r.W},jsPDF:{unit:'mm',format:'a4',orientation:r.land?'landscape':'portrait'},pagebreak:{mode:['css'],avoid:['tr','.ttd']}};
     let uri;try{uri=await html2pdf().set(opt).from(box).outputPdf('datauristring')}finally{document.body.removeChild(box)}
-    const nm={nilai:'rekap-nilai',hadir:'rekap-kehadiran',rapor:'rapor-santri'}[rp.sec];
+    let nm={nilai:'rekap-nilai',hadir:'rekap-kehadiran',rapor:'rapor-santri'}[rp.sec];
+    if(only){const sx=ctx().stu.find(x=>x.id===only);if(sx)nm='rapor-'+sx.nama.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
     await shareFile(nm+'-'+today()+'.pdf',uri.split(',')[1],'application/pdf');
     toast('PDF siap');
   }catch(e){alert('Gagal membuat PDF: '+(e.message||e))}
@@ -479,7 +486,7 @@ function rapor(s,C){
   const showH=DB.set.absensi&&rp.hadir&&C.keg.some(k=>k.rapor!==false);
   const kit=C.kit.map((k,i)=>{const n=getNil(C,k.id,s.id);return`<tr><td class="c">${i+1}</td><td>${esc(k.fan)}</td><td>${esc(k.nama)}${k.pokok?' ★':''}</td><td class="c">${n&&validN(n,C)?fmt(+n.nilai):'–'}</td><td class="c">${n&&n.khatam?'Khatam':'Belum'}</td></tr>`}).join('');
   const kg=C.keg.filter(k=>k.rapor!==false).map(k=>{const c={H:0,S:0,I:0,A:0};C.abs.filter(a=>a.kegiatanId===k.id&&(!rp.bulan||a.tanggal.startsWith(rp.bulan))).forEach(a=>{const v=a.status[s.id];if(v)c[v]++});return`<tr><td>${esc(k.nama)}</td><td class="c">${c.H}</td><td class="c">${c.S}</td><td class="c">${c.I}</td><td class="c">${c.A}</td></tr>`}).join('');
-  return `<section class="paper rapor${cl()}"><div class="ijz"><div class="ijz-in">
+  return `<section class="paper rapor${cl()}" data-sid="${s.id}"><div class="nop" style="text-align:right;margin:0 0 6px"><button class="b o s" onclick="unduh('${s.id}')">⇩ Unduh rapor ${esc(s.nama)}</button></div><div class="ijz"><div class="ijz-in">
   <div class="ijz-bsm">بسم الله الرحمن الرحيم</div>
   <div class="ijz-ttl">LAPORAN HASIL BELAJAR<span>${showH?'&amp; KEHADIRAN SANTRI':'SANTRI'}</span></div>
   <div class="ijz-rule"><i></i>◆<i></i></div>
